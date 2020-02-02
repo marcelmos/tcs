@@ -13,11 +13,13 @@ $resoult = mysqli_fetch_array($query);
 
 if(($resoult["login"] == $login) && ($resoult["haslo"] == $passw)){
     
-    $query = mysqli_query($db, "SELECT id FROM logowanie WHERE (login = '$login') AND (haslo = '$passw')");
+    $queryIdLogin = mysqli_query($db, "SELECT id FROM logowanie WHERE (login = '$login') AND (haslo = '$passw')");
+    $idLogin = mysqli_fetch_array($queryIdLogin);
+    $query = mysqli_query($db, "SELECT id FROM lokatorzy JOIN lokatorzy_logowanie ON lokatorzy.id = lokatorzy_logowanie.id_lokatorzy WHERE id_logowanie = $idLogin[0]");
     $clientId = mysqli_fetch_array($query);
     $_SESSION['clientToken'] = $clientId;
     
-    $queryTyp = mysqli_query($db, "SELECT idKonta FROM logowanie WHERE id = '$clientId[0]'");
+    $queryTyp = mysqli_query($db, "SELECT idKonta FROM logowanie WHERE (login = '$login') AND (haslo = '$passw')");
     $typKonta = mysqli_fetch_array($queryTyp);
     $_SESSION['typKonta'] = $typKonta;
     

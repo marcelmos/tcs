@@ -30,6 +30,8 @@ $db = mysqli_connect($host, $user, $password, $db);
     </div>
 
     <div class="main-full">
+       <div class="alert"><h2>UWAGA</h2>Nie należy odświerzać strony po wprowadzeniu wartości w pola.</div>
+       
         <form action="createUser.php" method="post">
             Dane lokatora:<br>
             <br>
@@ -54,6 +56,7 @@ $db = mysqli_connect($host, $user, $password, $db);
             <br>
             <input type="submit" id="submit" disabled>
         </form>
+        
     </div>
     <!--
     <div class="main insert">
@@ -92,23 +95,34 @@ $db = mysqli_connect($host, $user, $password, $db);
     $pass = $_POST['password'];
     $accountType = $_POST['idKonta'];
     
+
     if($accountType == 2){
-        $querySingIn = mysqli_query($db, "INSERT INTO logowanie(idKonta, login, haslo) VALUES ($accountType, '$login', '$pass')");
-        $queryPerson = mysqli_query($db, "INSERT INTO lokatorzy(imie, nazwisko) VALUES ('$firstName', '$lastName')");
+        mysqli_query($db, "INSERT INTO logowanie(idKonta, login, haslo) VALUES ($accountType, '$login', '$pass')"); //Create login datas
+        mysqli_query($db, "INSERT INTO lokatorzy(imie, nazwisko) VALUES ('$firstName', '$lastName')"); //Create person
+        $queryRelation = mysqli_query($db, "SELECT lokatorzy.id, logowanie.id FROM lokatorzy, logowanie WHERE (lokatorzy.imie = '$firstName')AND(lokatorzy.nazwisko = '$lastName')AND(logowanie.login = '$login')AND(logowanie.haslo='$pass')"); //Search id to relation
+//        $result = mysqli_fetch_array($queryRelation);
+//        $queryRelationCreate = mysqli_query($db, "INSERT INTO lokatorzy_logowanie(id_lokatorzy, id_logowanie) VALUES (".$result['lokatorzy.id'].", ".$result['logowanie.id'].")");
+        while($result = mysqli_fetch_array($queryRelation)){
+            mysqli_query($db, "INSERT INTO `lokatorzy_logowanie` (`id_lokatorzy`, `id_logowanie`) VALUES ('$result[0]', '$result[1]')"); //Create relation
+        }
         $succes = $db;
     }else{
-        $querySingIn = mysqli_query($db, "INSERT INTO logowanie(idKonta, login, haslo) VALUES ($accountType, '$login', '$pass')");
+        mysqli_query($db, "INSERT INTO logowanie(idKonta, login, haslo) VALUES ($accountType, '$login', '$pass')"); //Create login datas
         $succes = $db;
     }
     
-    
+    if($succes == true){
+        echo "Urzytkownik utworzony poprawnie.";
+    }else if($succes == false){
+        echo "Tworzenie urzytkownika zakończyło się niepowodzeniem.";
+    }
     
     mysqli_close($db);
     
-    if($succes == true){
-//    header("Location: createUser.php");
-    }else{
-        echo "Tworzenie urzytkownika zakończyło się niepowodzeniem";
-    }
+//    if($succes == true){
+//        echo "Urzytkownik utworzony poprawnie.";
+//    }else if($succes == false){
+//        echo "Tworzenie urzytkownika zakończyło się niepowodzeniem.";
+//    }
 ?>
 </html>

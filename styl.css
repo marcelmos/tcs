@@ -100,3 +100,11 @@ tr:hover{
 .hide{
     display: none;
 }
+
+.alert{
+    background-color: #ff4545;
+    border: solid 2px red;
+    color: #fff;
+    padding: 20px;
+    float: right;
+}

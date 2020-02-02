@@ -21,7 +21,7 @@ $db = mysqli_connect($host, $user, $password, $db);
             <?php
 //            $clientId = $_SESSION['clientToken'];       //Data as array
 
-            $query = mysqli_query($db, "SELECT imie, nazwisko FROM lokatorzy JOIN lokatorzy_logowanie ON lokatorzy.id = lokatorzy_logowanie.id_lokatorzy WHERE id_logowanie = '$clientId[0]'");
+            $query = mysqli_query($db, "SELECT imie, nazwisko FROM lokatorzy WHERE id = '$clientId[0]'");
             $resoult = mysqli_fetch_array($query);
 
             echo $resoult['imie']." ".$resoult['nazwisko'];

@@ -1,0 +1,4 @@
+SELECT lokatorzy.id, logowanie.id FROM lokatorzy, logowanie WHERE (lokatorzy.imie = "Testowicz")AND(lokatorzy.nazwisko = "Testowski")AND(logowanie.login = "Testowicz")AND(logowanie.haslo="Test") 
+
+
+9 6
