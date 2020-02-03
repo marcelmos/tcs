@@ -54,12 +54,15 @@ th{
 }
 
 tr{
-    background-color: #77badd;
     text-align: right; 
 }
 
-tr:hover{
-    background-color: rgba(130, 202, 240, 0.5);
+tr:nth-child(2n){
+    background-color: #77badd; 
+}
+
+tr:nth-child(2n+1) {
+	background-color: #6faecd;
 }
 
 .login-window{
