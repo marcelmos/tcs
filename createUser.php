@@ -97,17 +97,7 @@ $db = mysqli_connect($host, $user, $password, $db);
     
 
     if($accountType == 2){
-        mysqli_query($db, "INSERT INTO logowanie(idKonta, login, haslo) VALUES ($accountType, '$login', '$pass')"); //Create login datas
-        mysqli_query($db, "INSERT INTO lokatorzy(imie, nazwisko) VALUES ('$firstName', '$lastName')"); //Create person
-        $queryRelation = mysqli_query($db, "SELECT lokatorzy.id, logowanie.id FROM lokatorzy, logowanie WHERE (lokatorzy.imie = '$firstName')AND(lokatorzy.nazwisko = '$lastName')AND(logowanie.login = '$login')AND(logowanie.haslo='$pass')"); //Search id to relation
-//        $result = mysqli_fetch_array($queryRelation);
-//        $queryRelationCreate = mysqli_query($db, "INSERT INTO lokatorzy_logowanie(id_lokatorzy, id_logowanie) VALUES (".$result['lokatorzy.id'].", ".$result['logowanie.id'].")");
-        while($result = mysqli_fetch_array($queryRelation)){
-            mysqli_query($db, "INSERT INTO `lokatorzy_logowanie` (`id_lokatorzy`, `id_logowanie`) VALUES ('$result[0]', '$result[1]')"); //Create relation
-        }
-        $succes = $db;
-    }else{
-        mysqli_query($db, "INSERT INTO logowanie(idKonta, login, haslo) VALUES ($accountType, '$login', '$pass')"); //Create login datas
+        mysqli_query($db, "INSERT INTO lokatorzy(imie, nazwisko, login, haslo, typKonta_id) VALUES ('$firstName', '$lastName','$login','$pass','$accountType')"); //Create person
         $succes = $db;
     }
     

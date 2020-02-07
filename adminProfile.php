@@ -81,12 +81,18 @@ $db = mysqli_connect($host, $user, $password, $db);
             
             $clientId = $_SESSION['clientToken'];       //Data as array
 
-            $query = mysqli_query($db, "SELECT lokatorzy.id, lokatorzy.imie, lokatorzy.nazwisko, stanLicznika, dataOdczytu FROM dane JOIN lokatorzy ON  dane.idLokatora = lokatorzy.id ORDER BY dataOdczytu ASC");
+            $query = mysqli_query($db, "SELECT lokatorzy.id, lokatorzy.imie, lokatorzy.nazwisko, stanLicznika, dataOdczytu FROM dane JOIN lokatorzy ON  dane.idLokatora = lokatorzy.id ORDER BY concat(lokatorzy.id, lokatorzy.nazwisko) ASC, dataOdczytu ASC");
 //                $resoult = mysqli_fetch_array($query);
             
-            $lastValue = 0;
-            $difference = 0;
+            $idLokatora = 0;
             while($resoult = mysqli_fetch_array($query)){
+
+                if ($idLokatora!=$resoult[0])
+                {
+                    $lastValue = 0;
+                    $difference = 0;
+                    $idLokatora=$resoult[0];
+                }
                 if($lastValue > 0){
                     $difference = $resoult['stanLicznika'] - $lastValue;
                     $lastValue = $lastValue."m<sup>3</sup>";

@@ -52,8 +52,8 @@ $db = mysqli_connect($host, $user, $password, $db);
             <input type="text" name="newLogin" maxlength="30" id="newLogin" onchange="check()" placeholder="Minimalna długość 4 znaków"><br>
             Nowe hasło: <br>
             <input type="password" name="newPassword" maxlength="30" id="newPassword" onchange="check()" placeholder="Minimalna długość 8 znaków"><br>
-            Powtóż nowe hasło: <br>
-            <input type="password" name="newPasswordRepeat" maxlength="30" id="newPasswordRepeat" onchange="check()"><br>
+            Powtórz nowe hasło: <br>
+            <input type="password" name="repeatPassword" maxlength="30" id="repeatPassword" onchange="check()"><br>
             Stare hasło: <br>
             <input type="password" name="actualPassword" id="actualPassword" onchange="check()"> <br>
             <br>
@@ -66,21 +66,25 @@ $db = mysqli_connect($host, $user, $password, $db);
     function check() {
         var newLogin = document.getElementById("newLogin").value;
         var newPassword = document.getElementById("newPassword").value;
-        var newPasswordRepeat = document.getElementById("newPasswordRepeat").value;
+        var repeatPassword = document.getElementById("repeatPassword").value;
         var actualPassword = document.getElementById("actualPassword").value;
         var passwrdCorrect = false;
 
-        if ((newPassword == newPasswordRepeat) && ((newPassword.length >= 8) && (newPasswordRepeat.length >= 8))) {
+        if ((newPassword == repeatPassword) && newPassword.length >= 8) {
             document.getElementById("newPassword").style.border = "solid 5px #1baf00";
-            document.getElementById("newPasswordRepeat").style.border = "solid 5px #1baf00";
+            document.getElementById("repeatPassword").style.border = "solid 5px #1baf00";
             passwrdCorrect = true;
-        } else if ((newPassword != newPasswordRepeat) || ((newPassword.length < 8) || (newPasswordRepeat.length < 8))) {
+        } else if ((newPassword != repeatPassword) || newPassword.length < 8) {
             document.getElementById("newPassword").style.border = "solid 5px red";
-            document.getElementById("newPasswordRepeat").style.border = "solid 5px red";
+            document.getElementById("repeatPassword").style.border = "solid 5px red";
             passwrdCorrect = false;
-        } else {
+        } else if (newLogin >= 4 && actualPassword > 0) {
             document.getElementById("newPassword").style.border = "none";
-            document.getElementById("newPasswordRepeat").style.border = "none";
+            document.getElementById("repeatPassword").style.border = "none";
+            passwrdCorrect = true;
+        } else{
+            document.getElementById("newPassword").style.border = "none";
+            document.getElementById("repeatPassword").style.border = "none";
             passwrdCorrect = false;
         }
 
