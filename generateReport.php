@@ -4,7 +4,7 @@ session_start();
 $typKonta = $_SESSION['typKonta'];
     
 if($typKonta[0] != "1"){
-    header("Location: logout.php");
+    header("Location: logout.php");         //Check if client token is is admin
 }
 ?>
 <head>

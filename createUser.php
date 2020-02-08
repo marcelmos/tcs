@@ -4,12 +4,12 @@ session_start();
 $typKonta = $_SESSION['typKonta'];
     
 if($typKonta[0] != "1"){
-    header("Location: logout.php");
+    header("Location: logout.php");         //Check if client token is is admin
 }
         
 //Connect to DB
 require_once('db_ini.php');
-$db = mysqli_connect($host, $user, $password, $db);
+$db = mysqli_connect($host, $db_user, $db_pass, $db);
     
 ?>
 

@@ -2,7 +2,7 @@
 
 $host = "localhost";
 $db = "lokatorzynew";
-$user = "root";
-$password = "";
+$db_user = "root";
+$db_pass = "";
 
 ?>

@@ -6,7 +6,7 @@ $typKonta = $_SESSION['typKonta'];
     
 //Connect to DB
 require_once('db_ini.php');
-$db = mysqli_connect($host, $user, $password, $db);
+$db = mysqli_connect($host, $db_user, $db_pass, $db);
 
 ?>
 
