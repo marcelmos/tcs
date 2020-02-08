@@ -8,7 +8,7 @@ if($typKonta[0] != "1"){
 }
         
 //Connect to DB
-include('db_ini.php');
+require_once('db_ini.php');
 $db = mysqli_connect($host, $user, $password, $db);
     
 ?>

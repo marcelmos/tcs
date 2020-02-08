@@ -3,7 +3,7 @@ session_start();
 $clientId = $_SESSION['clientToken'];       //Id aktualnego urzytkownika w danej sesji
     
 //Connect to DB
-include('db_ini.php');
+require_once('db_ini.php');
 $db = mysqli_connect($host, $user, $password, $db);
 
 $stanLicznika = $_POST['licznik'];
