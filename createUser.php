@@ -108,15 +108,15 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
     
 
     if($accountType == 2){
-        mysqli_query($db, "INSERT INTO lokatorzy(imie, nazwisko, login, haslo, typKonta_id) VALUES ('$firstName', '$lastName','$login','$pass','$accountType')"); //Create person
-        $succes = $db;
+        $checkResoult = mysqli_query($db, "INSERT INTO lokatorzy(imie, nazwisko, login, haslo, typKonta_id) VALUES ('$firstName', '$lastName','$login','$pass','$accountType')"); //Create person
     }
     
     //User creating status
-    if($succes == true){
-        $_SESSION["err_usrCreate"] = "<br><br><div class='error'>Wystąpił błąd przy tworzeniu nowego użytkownika</div>";
-    }else if($succes == false){
+    //ERROR odwrotnie działa. Pomyślnie wykonane = błąd
+    if($checkResoult){
         $_SESSION["usrCreated"] = "<br><br><div class='correct'>Użytkownik <b>$firstName $lastName</b> utworzony pomyślnie</div>";
+    }else{
+        $_SESSION["err_usrCreate"] = "<br><br><div class='error'>Wystąpił błąd przy tworzeniu nowego użytkownika</div>";
     }
     
     mysqli_close($db);

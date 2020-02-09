@@ -30,7 +30,76 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
 
     <div class="main-full">
        
-        <table  >
+       <h3>Najnowsze odczyty</h3>
+       <table>
+            <tr>
+                <td class="hide">ID</td>
+                <th>Imię i Nazwisko</th>
+                <th>Poprzedni Stan Licznika</th>
+                <th>Najnowszy Stan Licznika</th>
+                <th>Data Najnowszego Odczytu<br><small>Format daty rok-miesiąc-dzień</small></th>
+                <th>Różnica</th>
+            </tr>
+            
+            <?php
+           
+            $dateNow = date("Y-m");
+            $difference = 0;
+            //$lastValue = 0;
+            $sumValue = 0;
+            $x = 0;
+
+            $queryHist = mysqli_query($db, "SELECT lokatorzy.imie, lokatorzy.nazwisko, idLokatora, stanLicznika, dataOdczytu FROM dane JOIN lokatorzy ON dane.idLokatora = lokatorzy.id WHERE dataOdczytu >= '$dateNow-01' AND dataOdczytu <= '$dateNow-31' ORDER BY dataOdczytu DESC");
+    //        $resoult = mysqli_fetch_array($query);
+
+            while($resoult = mysqli_fetch_array($queryHist)){
+                $x++; //Auto incrementation
+    //            $lastValue = array(0); //Setting var
+
+                //Check if month is 01
+                if(date("m") == "01"){
+                    $prevYearMonth = ((date("Y")-1)."-12");
+                }else{
+                    $prevYearMonth = (date("Y")."-".(date("m")-1));
+                }
+
+                $queryLastHist = mysqli_query($db, "SELECT stanLicznika FROM dane WHERE idLokatora = ".$resoult['idLokatora']." AND (dataOdczytu BETWEEN '$prevYearMonth-01' AND '$prevYearMonth-31') GROUP BY dataOdczytu DESC");
+                
+    //            $queryLast = mysqli_query($db, "SELECT stanLicznika FROM dane JOIN lokatorzy ON  dane.idLokatora = lokatorzy.id WHERE lokatorzy.id = ".$resoult['id']." AND (dataOdczytu >= '$prevYearMonth-01' AND dataOdczytu <= '$prevYearMonth-31') GROUP BY dataOdczytu DESC");
+
+                $lastValue = mysqli_fetch_array($queryLastHist);
+
+                if($lastValue > 0){
+                    $lastValueInt = $lastValue[0];
+                    $lastValueShow = $lastValueInt."m<sup>3</sup>";
+                    $difference = ($resoult['stanLicznika'] - $lastValue[0]);
+                }else{
+                    $lastValueShow = "Brak Danych";
+                    $difference = 0;
+                    $lastValueInt = 0;
+                }
+
+    //            echo "<tr><td>".$resoult['imie']." ".$resoult['nazwisko']."</td> 
+    //                <td>".$lastValue['stanLicznika']."</td>
+    //                <td>".$resoult['stanLicznika']."m<sup>3</sup></td>
+    //                <td>".$resoult['dataOdczytu']."</td>
+    //                <td>".($resoult['stanLicznika'] - $lastValue['stanLicznika'])."m<sup>3</sup></td></tr>";
+
+                echo "<tr><td>".$resoult['imie']." ".$resoult['nazwisko']."</td> 
+                    <td>".$lastValueShow."</td>
+                    <td>".$resoult['stanLicznika']."m<sup>3</sup></td>
+                    <td>".$resoult['dataOdczytu']."</td>
+                    <td>".$difference."m<sup>3</sup></td></tr>";
+
+                $sumValue = ($resoult['stanLicznika']-$lastValueInt);
+            }
+            echo "<tr><td colspan='3'></td> <th>Średnia: </th> <td>".($sumValue/$x)."m<sup>3</sup></td></tr>";
+           
+           ?>
+        </table>
+       
+       <h3>Historia odczytów</h3>
+        <table>
             <tr>
                 <td class="hide">ID</td>
                 <th>Imię i Nazwisko</th>
