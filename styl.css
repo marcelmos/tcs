@@ -12,6 +12,14 @@ input, select{
     padding: 5px;
 }
 
+option:nth-child(2n){
+    background-color: #9fc8dd; 
+}
+
+option:nth-child(2n+1) {
+	background-color: #8db3c6;
+}
+
 button{
     background-color: #a51b1b;
     border: none;
@@ -110,4 +118,12 @@ tr:nth-child(2n+1) {
     color: #fff;
     padding: 20px;
     float: right;
+}
+
+.error{
+    color: #fa1515;
+}
+
+.correct{
+    color: #00e000;
 }

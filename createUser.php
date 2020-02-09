@@ -30,7 +30,7 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
     </div>
 
     <div class="main-full">
-       <div class="alert"><h2>UWAGA</h2>Nie należy odświerzać strony po wprowadzeniu wartości w pola.</div>
+        <div class="alert"><h2>UWAGA</h2>Nie należy odświerzać strony po wprowadzeniu wartości w pola.</div>
        
         <form action="createUser.php" method="post">
             Dane lokatora:<br>
@@ -56,6 +56,17 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
             <br>
             <input type="submit" id="submit" disabled>
         </form>
+        <?php
+            if(isset($_SESSION["usrCreated"])){
+                echo $_SESSION["usrCreated"];
+                unset($_SESSION["usrCreated"]);
+            }else if(isset($_SESSION["err_usrCreate"])){
+                echo $_SESSION["err_usrCreate"];
+                unset($_SESSION["err_usrCreated"]);
+            }else{
+                echo "";
+            }
+        ?>
         
     </div>
     <!--
@@ -101,10 +112,11 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
         $succes = $db;
     }
     
+    //User creating status
     if($succes == true){
-        echo "Urzytkownik utworzony poprawnie.";
+        $_SESSION["err_usrCreate"] = "<br><br><div class='error'>Wystąpił błąd przy tworzeniu nowego użytkownika</div>";
     }else if($succes == false){
-        echo "Tworzenie urzytkownika zakończyło się niepowodzeniem.";
+        $_SESSION["usrCreated"] = "<br><br><div class='correct'>Użytkownik <b>$firstName $lastName</b> utworzony pomyślnie</div>";
     }
     
     mysqli_close($db);

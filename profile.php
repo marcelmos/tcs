@@ -103,6 +103,16 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
             <input type="date" name="data"><br>
             <br>
             <input type="submit" value="Wyślij">
+            <?php
+                if(isset($_SESSION["err_valInput"])){
+                    echo $_SESSION["err_valInput"];
+                    unset($_SESSION["err_valInput"]);
+                }else{
+                    echo "";
+                }
+                
+                
+            ?>
         </form>
     </div>
 </body>

@@ -16,7 +16,8 @@ if((($stanLicznika >= 0)&&($stanLicznika <= 99999))&&($dataOdczytu > 0)){
     $_SESSION['clientToken'] = $clientId;
     header("Location: profile.php");
 }else{
-    echo "Wartość stanu licznika lub data odczytu jest niepoprawna.";
+    $_SESSION["err_valInput"] = "<br><br><div class='error'>Wartość stanu licznika lub data odczytu jest niepoprawna.</div>";
+    header("Location: profile.php");
 }
 
 mysqli_close($db);
