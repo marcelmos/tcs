@@ -30,6 +30,7 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
             <a href="logout.php"><button>Wyloguj się</button></a>
         </h2>
         <a href="profileEdit.php"><input type="button" value="Zmień login/hasło"></a>
+        <a href="czynsze.php"><input type="button" value="Czynsze" disabled></a>
     </div>
 
     <div class="main">

@@ -37,7 +37,8 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
         </h2>
         <?php
         if($typKonta[0] != "1"){
-            echo "<a href='profile.php'><input type='button' value='Wróć'></a>";
+            echo "<a href='profile.php'><input type='button' value='Wróć'></a> ";
+            echo "<a href='czynsze.php'><input type='button' value='Czynsze' disabled></a>";
         }else if($typKonta[0] == "1"){
             echo "<a href='adminProfile.php'><input type='button' value='Wróć do Panelu Głównego'></a> ";
             echo "<a href='createUser.php'><input type='button' value='Kreator użytkownik'></a> ";
