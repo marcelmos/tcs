@@ -1,8 +1,8 @@
 <html>
 <?php
 session_start();
-$clientId = $_SESSION['clientToken'];       //Data as array
-$typKonta = $_SESSION['typKonta'];
+$clientId = $_SESSION['clientToken'];       //Client individual ID
+$typKonta = $_SESSION['typKonta'];          //Account type
     
 //Connect to DB
 require_once('db_ini.php');
@@ -28,7 +28,6 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
 
                 echo $resoult['imie']." ".$resoult['nazwisko'];
 
-                mysqli_close($db);
             }else if($typKonta[0] == "1"){
                 echo "Administrator";
             }
@@ -48,7 +47,7 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
     </div>
 
     <div class="main-full">
-        <form action="sendEdit.php" method="post">
+        <form method="post">
             Zmień login: <br>
             <input type="text" name="newLogin" maxlength="30" id="newLogin" onchange="check()" placeholder="Minimalna długość 4 znaków"><br>
             Nowe hasło: <br>
@@ -58,12 +57,21 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
             Stare hasło: <br>
             <input type="password" name="actualPassword" id="actualPassword" onchange="check()"> <br>
             <br>
-            <input type="submit" id="submit" value="Wprowadź zmiany" disabled><br>
+            <input type="submit" id="submit" value="Wprowadź zmiany" ><br>
         </form>
+        <?php
+            if(isset($_SESSION["changeStatus"])){
+                echo $_SESSION["changeStatus"];
+                unset($_SESSION["changeStatus"]);
+            }else{
+                echo " ";
+            }
+        ?>
         <small>*Wypełnione pola zostaną zmienione <br> Maksymalna długość loginu i hasła to 30 znaków</small>
     </div>
 </body>
 <script>
+    /*
     function check() {
         var newLogin = document.getElementById("newLogin").value;
         var newPassword = document.getElementById("newPassword").value;
@@ -103,6 +111,35 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
             document.getElementById("actualPassword").style.border = "solid 5px red";
         }
     }
+    */
 </script>
 
+
+<?php
+    $newLogin = $_POST['newLogin'];
+    $newPass = $_POST['newPassword'];
+    $repPass = $_POST['repeatPassword'];
+    $pass = $_POST['actualPassword'];
+    
+    if((strlen($newLogin)>=4)){
+        
+        $chLogin = mysqli_query($db, "SELECT COUNT(login) FROM lokatorzy WHERE login = $newLogin"); //Check if login exist
+        $resoultLogin[0] = mysqli_fetch_array($chLogin);
+        $chActPass = mysqli_query($db, "SELECT COUNT(haslo) FROM lokatorzy WHERE (haslo = '$pass') AND (id = $clientId[0])");   //Check if pass correct
+        $resoultPass[0] = mysqli_fetch_array($chActPass);
+        
+        if(($resoultLogin[0] == "0")&&($resoultPass[0] == "1")){
+//            mysqli_query($db, "INSERT INTO lokatorzy(login) VALUES ($newLogin) WHERE (haslo = '$pass') AND (id = $clientId[0])");
+            $_SESSION["changeStatus"] = "<div class='correct'>Poprawnie zmieniono login.</div>";
+            header("Location: profileEdit.php");
+            exit();
+        }else{
+            $_SESSION["changeStatus"] = "<div class='error'>Wystąpił błąd podczas zmiany loginu!</div>";
+            header("Location: profileEdit.php");
+            exit();
+        }
+    }
+    
+    mysqli_close($db);
+?>
 </html>
