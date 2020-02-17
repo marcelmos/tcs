@@ -1,15 +1,15 @@
-<html>
 <?php
 session_start();
 $clientId = $_SESSION['clientToken'];       //Client individual ID
 $typKonta = $_SESSION['typKonta'];          //Account type
-    
+
 //Connect to DB
 require_once('db_ini.php');
 $db = mysqli_connect($host, $db_user, $db_pass, $db);
 
 ?>
 
+<html>
 <head>
     <meta charset="utf-8">
     <title>Edycja profilu</title>
@@ -49,9 +49,23 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
     <div class="main-full">
         <form method="post">
             Zmień login: <br>
-            <input type="text" name="newLogin" maxlength="30" id="newLogin" onchange="check()" placeholder="Minimalna długość 4 znaków"><br>
+            <input type="text" name="newLogin" maxlength="20" id="newLogin" onchange="check()" placeholder="Minimalna długość 4 znaków"><br>
+
+            <?php
+                if(isset($_SESSION['e_login'])){
+                    echo "<div class='error'>".$_SESSION['e_login']."</div>";
+                    unset($_SESSION['e_login']);
+                }
+            ?>
+
             Nowe hasło: <br>
             <input type="password" name="newPassword" maxlength="30" id="newPassword" onchange="check()" placeholder="Minimalna długość 8 znaków"><br>
+            <?php
+                if(isset($_SESSION['e_newPass'])){
+                    echo "<div class='error'>".$_SESSION['e_newPass']."</div>";
+                    unset($_SESSION['e_newPass']);
+                }
+            ?>
             Powtórz nowe hasło: <br>
             <input type="password" name="repeatPassword" maxlength="30" id="repeatPassword" onchange="check()"><br>
             Stare hasło: <br>
@@ -59,87 +73,68 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
             <br>
             <input type="submit" id="submit" value="Wprowadź zmiany" ><br>
         </form>
-        <?php
-            if(isset($_SESSION["changeStatus"])){
-                echo $_SESSION["changeStatus"];
-                unset($_SESSION["changeStatus"]);
-            }else{
-                echo " ";
-            }
-        ?>
+
         <small>*Wypełnione pola zostaną zmienione <br> Maksymalna długość loginu i hasła to 30 znaków</small>
     </div>
 </body>
-<script>
-    /*
-    function check() {
-        var newLogin = document.getElementById("newLogin").value;
-        var newPassword = document.getElementById("newPassword").value;
-        var repeatPassword = document.getElementById("repeatPassword").value;
-        var actualPassword = document.getElementById("actualPassword").value;
-        var passwrdCorrect = false;
-
-        if ((newPassword == repeatPassword) && newPassword.length >= 8) {
-            document.getElementById("newPassword").style.border = "solid 5px #1baf00";
-            document.getElementById("repeatPassword").style.border = "solid 5px #1baf00";
-            passwrdCorrect = true;
-        } else if ((newPassword != repeatPassword) || newPassword.length < 8) {
-            document.getElementById("newPassword").style.border = "solid 5px red";
-            document.getElementById("repeatPassword").style.border = "solid 5px red";
-            passwrdCorrect = false;
-        } else if (newLogin >= 4 && actualPassword > 0) {
-            document.getElementById("newPassword").style.border = "none";
-            document.getElementById("repeatPassword").style.border = "none";
-            passwrdCorrect = true;
-        } else{
-            document.getElementById("newPassword").style.border = "none";
-            document.getElementById("repeatPassword").style.border = "none";
-            passwrdCorrect = false;
-        }
-
-        if ((passwrdCorrect == true) && (actualPassword.length > 0)) {
-            document.getElementById("submit").disabled = false;
-            document.getElementById("actualPassword").style.border = "none";
-        } else if ((passwrdCorrect == true) && (newLogin.length >= 4) && (actualPassword.length > 0)) {
-            document.getElementById("submit").disabled = false;
-            document.getElementById("actualPassword").style.border = "none";
-        } else if ((newLogin.length >= 4) && (actualPassword.length > 0)) {
-            document.getElementById("submit").disabled = false;
-            document.getElementById("actualPassword").style.border = "none";
-        } else {
-            document.getElementById("submit").disabled = true;
-            document.getElementById("actualPassword").style.border = "solid 5px red";
-        }
-    }
-    */
-</script>
-
 
 <?php
-    $newLogin = $_POST['newLogin'];
-    $newPass = $_POST['newPassword'];
-    $repPass = $_POST['repeatPassword'];
-    $pass = $_POST['actualPassword'];
-    
-    if((strlen($newLogin)>=4)){
-        
-        $chLogin = mysqli_query($db, "SELECT COUNT(login) FROM lokatorzy WHERE login = $newLogin"); //Check if login exist
-        $resoultLogin[0] = mysqli_fetch_array($chLogin);
-        $chActPass = mysqli_query($db, "SELECT COUNT(haslo) FROM lokatorzy WHERE (haslo = '$pass') AND (id = $clientId[0])");   //Check if pass correct
-        $resoultPass[0] = mysqli_fetch_array($chActPass);
-        
-        if(($resoultLogin[0] == "0")&&($resoultPass[0] == "1")){
-//            mysqli_query($db, "INSERT INTO lokatorzy(login) VALUES ($newLogin) WHERE (haslo = '$pass') AND (id = $clientId[0])");
-            $_SESSION["changeStatus"] = "<div class='correct'>Poprawnie zmieniono login.</div>";
-            header("Location: profileEdit.php");
-            exit();
-        }else{
-            $_SESSION["changeStatus"] = "<div class='error'>Wystąpił błąd podczas zmiany loginu!</div>";
-            header("Location: profileEdit.php");
-            exit();
+    if(isset($_POST['actualPassword'])){
+
+        $allCorrect = true;    //Inputs status
+
+        //Inputs to check
+        $newLogin = $_POST['newLogin'];
+        $newPass = $_POST['newPassword'];
+        $repPass = $_POST['repeatPassword'];
+        $pass = $_POST['actualPassword'];
+
+        //Check new login
+        // if((strlen($newLogin)<3) || (strlen($newLogin)>20)){
+        //     $allCorrect = false;
+        //     $_SESSION['e_login'] = "Login musi posiadać od 3 do 20 znaków!";
+        // }
+
+        // if(ctype_alnum($newLogin)==false){
+        //     $allCorrect = false;
+        //     $_SESSION['e_login'] = "Login może składać się wyłącznie z liter i cyfr (bez polskich znaków)";
+        // }
+
+        //Check new password
+        if((strlen($newPass)<8) || (strlen($newPass)>20)){
+            $allCorrect = false;
+            $_SESSION['e_newPass'] = "Hasło musi posiadać od 8 do 20 znaków!";
         }
+
+        if($newPass != $repPass){
+            $allCorrect = false;
+            $_SESSION['e_newPass'] = "Podane hasła nie są identyczne!";
+        }
+
+        //Check actual password
+        /*
+            KOD SPRAWDZANIA AKTUALNEGO HASŁA
+        */
+
+        //Hash password
+        $newPass_hash = password_hash($newPass, PASSWORD_DEFAULT);
+
+        if($allCorrect == true){
+            // if(isset($newLogin) && isset($newPass_hash)){
+            //     mysqli_query($db, 'UPDATE lokatorzy SET login="'.$newLogin.'", haslo="'.$newPass_hash.'" WHERE id = "'.$clientId[0].'"');
+            // }
+
+            // if(isset($newLogin)){
+            //     mysqli_query($db, 'UPDATE lokatorzy SET login="'.$newLogin.'" WHERE id = "'.$clientId[0].'"');
+            // }
+
+            if(isset($newPass_hash)){
+                mysqli_query($db, 'UPDATE lokatorzy SET haslo="'.$newPass_hash.'"  WHERE id = "'.$clientId[0].'"');
+            }
+        }
+        // echo("Error description: " . $db -> error);
     }
-    
+
     mysqli_close($db);
 ?>
 </html>

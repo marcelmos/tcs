@@ -2,15 +2,15 @@
 <?php
 session_start();
 $typKonta = $_SESSION['typKonta'];
-    
+
 if($typKonta[0] != "1"){
     header("Location: logout.php");         //Check if client token is is admin
 }
-        
+
 //Connect to DB
 require_once('db_ini.php');
 $db = mysqli_connect($host, $db_user, $db_pass, $db);
-    
+
 ?>
 
 <head>
@@ -31,7 +31,7 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
 
     <div class="main-full">
         <div class="alert"><h2>UWAGA</h2>Nie należy odświerzać strony po wprowadzeniu wartości w pola.</div>
-       
+
         <form action="createUser.php" method="post">
             Dane lokatora:<br>
             <br>
@@ -67,7 +67,7 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
                 echo "";
             }
         ?>
-        
+
     </div>
     <!--
     <div class="main insert">
@@ -86,7 +86,7 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
     function check(){
         var password = document.getElementsByName("password")[0].value;
         var checkPass = document.getElementsByName("password")[1].value;
-        
+
         if(password == checkPass){
             document.getElementsByName("password")[0].style.border = "solid 2px green";
             document.getElementsByName("password")[1].style.border = "solid 2px green";
@@ -99,16 +99,18 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
     }
 </script>
 <?php
-    
+
     $firstName = $_POST['firstName'];
     $lastName = $_POST['lastName'];
     $login = $_POST['login'];
     $pass = $_POST['password'];
     $accountType = $_POST['idKonta'];
-    
 
-    $checkResoult = mysqli_query($db, "INSERT INTO lokatorzy(imie, nazwisko, login, haslo, typKonta_id) VALUES ('$firstName', '$lastName','$login','$pass','$accountType')"); //Create new account
-    
+    $newPass_hash = password_hash($pass, PASSWORD_DEFAULT);
+
+
+    $checkResoult = mysqli_query($db, "INSERT INTO lokatorzy(imie, nazwisko, login, haslo, typKonta_id) VALUES ('$firstName', '$lastName','$login','$newPass_hash','$accountType')"); //Create new account
+
     //User creating status
     //ERROR odwrotnie działa. Pomyślnie wykonane = błąd
     if($checkResoult == true){
@@ -118,9 +120,9 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
     }else if($checkResoult == false){
         $_SESSION["err_usrCreate"] = "<br><br><div class='error'>Wystąpił błąd przy tworzeniu nowego użytkownika</div>";
     }
-    
+
     mysqli_close($db);
-    
+
 //    if($succes == true){
 //        echo "Urzytkownik utworzony poprawnie.";
 //    }else if($succes == false){
