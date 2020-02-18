@@ -1,13 +1,13 @@
 <?php
 session_start();
 $clientId = $_SESSION['clientToken'];       //Id aktualnego urzytkownika w danej sesji
-    
+
 //Connect to DB
 require_once('db_ini.php');
 $db = mysqli_connect($host, $db_user, $db_pass, $db);
 
 $stanLicznika = $_POST['licznik'];
-$dataOdczytu = $_POST['data'];
+$dataOdczytu = date("Y-m-d");
 
 
 if((($stanLicznika >= 0)&&($stanLicznika <= 99999))&&($dataOdczytu > 0)){
