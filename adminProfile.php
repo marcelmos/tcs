@@ -6,30 +6,31 @@ $typKonta = $_SESSION['typKonta'];
     if($typKonta[0] != "1"){
     header("Location: logout.php");     //Check if client token is is admin
 }
-    
+
 //Connect to DB
 require_once('db_ini.php');
 $db = mysqli_connect($host, $db_user, $db_pass, $db);
-    
+
 ?>
 <head>
     <meta charset="utf-8">
-    <title></title>
+    <title>Panel Główny</title>
     <link rel="stylesheet" href="styl.css">
 </head>
 
 <body>
     <div class="top">
         <h2>Konto Administrator
-            <a href="logout.php"><button>Wyloguj się</button></a>
+            <a href="logout.php"><button class="logout">Wyloguj się</button></a>
         </h2>
         <a href="profileEdit.php"><input type="button" value="Zmień login/hasło"></a>
         <a href="createUser.php"><input type="button" value="Kreator użytkownik"></a>
+        <a href="accountManager.php"><input type="button" value="Menedżer kont"></a>
         <a href="generateReport.php"><input type="button" value="Kreator raportów"></a>
     </div>
 
     <div class="main-full">
-       
+
        <h3>Najnowsze odczyty</h3>
        <table>
             <tr>
@@ -40,9 +41,10 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
                 <th>Data Najnowszego Odczytu<br><small>Format daty rok-miesiąc-dzień</small></th>
                 <th>Różnica</th>
             </tr>
-            
+
             <?php
-           
+
+
             $dateNow = date("Y-m");
             $difference = 0;
             //$lastValue = 0;
@@ -64,7 +66,7 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
                 }
 
                 $queryLastHist = mysqli_query($db, "SELECT stanLicznika FROM dane WHERE idLokatora = ".$resoult['idLokatora']." AND (dataOdczytu BETWEEN '$prevYearMonth-01' AND '$prevYearMonth-31') GROUP BY dataOdczytu DESC");
-                
+
     //            $queryLast = mysqli_query($db, "SELECT stanLicznika FROM dane JOIN lokatorzy ON  dane.idLokatora = lokatorzy.id WHERE lokatorzy.id = ".$resoult['id']." AND (dataOdczytu >= '$prevYearMonth-01' AND dataOdczytu <= '$prevYearMonth-31') GROUP BY dataOdczytu DESC");
 
                 $lastValue = mysqli_fetch_array($queryLastHist);
@@ -79,13 +81,13 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
                     $lastValueInt = 0;
                 }
 
-    //            echo "<tr><td>".$resoult['imie']." ".$resoult['nazwisko']."</td> 
+    //            echo "<tr><td>".$resoult['imie']." ".$resoult['nazwisko']."</td>
     //                <td>".$lastValue['stanLicznika']."</td>
     //                <td>".$resoult['stanLicznika']."m<sup>3</sup></td>
     //                <td>".$resoult['dataOdczytu']."</td>
     //                <td>".($resoult['stanLicznika'] - $lastValue['stanLicznika'])."m<sup>3</sup></td></tr>";
 
-                echo "<tr><td>".$resoult['imie']." ".$resoult['nazwisko']."</td> 
+                echo "<tr><td>".$resoult['imie']." ".$resoult['nazwisko']."</td>
                     <td>".$lastValueShow."</td>
                     <td>".$resoult['stanLicznika']."m<sup>3</sup></td>
                     <td>".$resoult['dataOdczytu']."</td>
@@ -94,10 +96,10 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
                 $sumValue = ($resoult['stanLicznika']-$lastValueInt);
             }
             echo "<tr><td colspan='3'></td> <th>Średnia: </th> <td>".($sumValue/$x)."m<sup>3</sup></td></tr>";
-           
+
            ?>
         </table>
-       
+
        <h3>Historia odczytów</h3>
         <table>
             <tr>
@@ -114,12 +116,12 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
                     <select name="sortLokator" onchange="sortLokator(this.value)">
                         <option value="0">sortuj</option>
                         <?php
-                        
+
                         $query = mysqli_query($db, "SELECT id, imie, nazwisko FROM lokatorzy");
                         while($resoult = mysqli_fetch_array($query)){
                             echo "<option value=".$resoult['id'].">".$resoult['imie']." ".$resoult['nazwisko']."</option>";
                         }
-                        
+
                         ?>
                     </select>
                 </td>
@@ -147,12 +149,12 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
                 <td></td>
             </tr>
             <?php
-            
+
             $clientId = $_SESSION['clientToken'];       //Data as array
 
             $query = mysqli_query($db, "SELECT lokatorzy.id, lokatorzy.imie, lokatorzy.nazwisko, stanLicznika, dataOdczytu FROM dane JOIN lokatorzy ON  dane.idLokatora = lokatorzy.id ORDER BY concat(lokatorzy.id, lokatorzy.nazwisko) ASC, dataOdczytu ASC");
 //                $resoult = mysqli_fetch_array($query);
-            
+
             $idLokatora = 0;
             while($resoult = mysqli_fetch_array($query)){
 
@@ -168,19 +170,19 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
                 }else{
                     $lastValue = "Brak Danych";
                 }
-                    
-                    
+
+
                 echo "<tr><td class='hide' id='change'>".$resoult['id']."</td>
-                <td>".$resoult['imie']." ".$resoult['nazwisko']."</td> 
+                <td>".$resoult['imie']." ".$resoult['nazwisko']."</td>
                 <td id='lastValue'>".$lastValue."</td>
                 <td id='newValue'>".$resoult['stanLicznika']."m<sup>3</sup></td>
                 <td>".$resoult['dataOdczytu']."</td>
                 <td>".$difference."m<sup>3</sup></td></tr>";
-                
-                
+
+
                 $lastValue = $resoult['stanLicznika'];
             }
-            
+
             mysqli_close($db);
             ?>
         </table>
@@ -200,6 +202,6 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
 </body>
 
 <script>
-    
+
 </script>
 </html>

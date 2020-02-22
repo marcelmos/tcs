@@ -32,7 +32,7 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
                 echo "Administrator";
             }
             ?>
-            <a href="logout.php"><button>Wyloguj się</button></a>
+            <a href="logout.php"><button class="logout">Wyloguj się</button></a>
         </h2>
         <?php
         if($typKonta[0] != "1"){
@@ -41,6 +41,7 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
         }else if($typKonta[0] == "1"){
             echo "<a href='adminProfile.php'><input type='button' value='Wróć do Panelu Głównego'></a> ";
             echo "<a href='createUser.php'><input type='button' value='Kreator użytkownik'></a> ";
+            echo "<a href='accountManager.php'><input type='button' value='Menedżer kont'></a> ";
             echo "<a href='generateReport.php'><input type='button' value='Kreator raportów'></a> ";
         }
         ?>
@@ -70,8 +71,28 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
             <input type="password" name="repeatPassword" maxlength="30" id="repeatPassword" onchange="check()"><br>
             Stare hasło: <br>
             <input type="password" name="actualPassword" id="actualPassword" onchange="check()"> <br>
+            <?php
+                if(isset($_SESSION['e_actualPass'])){
+                    echo "<div class='error'>".$_SESSION['e_actualPass']."</div>";
+                    unset($_SESSION['e_actualPass']);
+                }
+            ?>
             <br>
             <input type="submit" id="submit" value="Wprowadź zmiany" ><br>
+            <?php
+                if(isset($_SESSION['i_passAndLogin'])){
+                    echo "<div class='correct'>".$_SESSION['i_passAndLogin']."</div>";
+                    unset($_SESSION['i_passAndLogin']);
+                }
+                else if(isset($_SESSION['i_login'])){
+                    echo "<div class='correct'>".$_SESSION['i_login']."</div>";
+                    unset($_SESSION['i_login']);
+                }
+                else if(isset($_SESSION['i_pass'])){
+                    echo "<div class='correct'>".$_SESSION['i_pass']."</div>";
+                    unset($_SESSION['i_pass']);
+                }
+            ?>
         </form>
 
         <small>*Wypełnione pola zostaną zmienione <br> Maksymalna długość loginu i hasła to 30 znaków</small>
@@ -81,57 +102,65 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
 <?php
     if(isset($_POST['actualPassword'])){
 
-        $allCorrect = true;    //Inputs status
+        //Inputs status
+        $loginCorrect = true;
+        $passCorrect = true;
+        $accessCheck = false; //Check if actual pass correct
 
         //Inputs to check
         $newLogin = $_POST['newLogin'];
         $newPass = $_POST['newPassword'];
         $repPass = $_POST['repeatPassword'];
-        $pass = $_POST['actualPassword'];
+        $actualPass = $_POST['actualPassword'];
 
         //Check new login
-        // if((strlen($newLogin)<3) || (strlen($newLogin)>20)){
-        //     $allCorrect = false;
-        //     $_SESSION['e_login'] = "Login musi posiadać od 3 do 20 znaków!";
-        // }
+        if((strlen($newLogin)<3) || (strlen($newLogin)>20)){
+            $loginCorrect = false;
+            $_SESSION['e_login'] = "Login musi posiadać od 3 do 20 znaków!";
+        }
 
-        // if(ctype_alnum($newLogin)==false){
-        //     $allCorrect = false;
-        //     $_SESSION['e_login'] = "Login może składać się wyłącznie z liter i cyfr (bez polskich znaków)";
-        // }
+        if(ctype_alnum($newLogin)==false){
+            $loginCorrect = false;
+            $_SESSION['e_login'] = "Login może składać się wyłącznie z liter i cyfr (bez polskich znaków)";
+        }
 
         //Check new password
         if((strlen($newPass)<8) || (strlen($newPass)>20)){
-            $allCorrect = false;
+            $passCorrect = false;
             $_SESSION['e_newPass'] = "Hasło musi posiadać od 8 do 20 znaków!";
         }
 
         if($newPass != $repPass){
-            $allCorrect = false;
+            $passCorrect = false;
             $_SESSION['e_newPass'] = "Podane hasła nie są identyczne!";
         }
 
         //Check actual password
-        /*
-            KOD SPRAWDZANIA AKTUALNEGO HASŁA
-        */
+
 
         //Hash password
         $newPass_hash = password_hash($newPass, PASSWORD_DEFAULT);
 
-        if($allCorrect == true){
-            // if(isset($newLogin) && isset($newPass_hash)){
-            //     mysqli_query($db, 'UPDATE lokatorzy SET login="'.$newLogin.'", haslo="'.$newPass_hash.'" WHERE id = "'.$clientId[0].'"');
-            // }
+        //Take datas to check password
+        $checkQuery = mysqli_query($db, "SELECT id, haslo FROM lokatorzy WHERE id = '$clientId[0]'");
+        $check = mysqli_fetch_array($checkQuery);
 
-            // if(isset($newLogin)){
-            //     mysqli_query($db, 'UPDATE lokatorzy SET login="'.$newLogin.'" WHERE id = "'.$clientId[0].'"');
-            // }
+        if(($check["id"] == $clientId[0]) && (password_verify($actualPass, $check["haslo"]))){
 
-            if(isset($newPass_hash)){
+            if(($loginCorrect == true) && ($passCorrect == true)){
+                mysqli_query($db, 'UPDATE lokatorzy SET login="'.$newLogin.'", haslo="'.$newPass_hash.'" WHERE id = "'.$clientId[0].'"');
+                $_SESSION['i_passAndLogin'] = "Login i hasło zostały poprawnie zmienione.";
+            }else if(($loginCorrect == true) && ($passCorrect == false)){
+                mysqli_query($db, 'UPDATE lokatorzy SET login="'.$newLogin.'" WHERE id = "'.$clientId[0].'"');
+                $_SESSION['i_login'] = "Login został poprawnie zmieniony.";
+            }else if(($loginCorrect == false) && ($passCorrect == true)){
                 mysqli_query($db, 'UPDATE lokatorzy SET haslo="'.$newPass_hash.'"  WHERE id = "'.$clientId[0].'"');
+                $_SESSION['i_pass'] = "Hasło zostało poprawnie zmienione.";
             }
+        }else{
+            $_SESSION['e_actualPass'] = "Podane hasło jest nieprawidłowe!";
         }
+
         // echo("Error description: " . $db -> error);
     }
 

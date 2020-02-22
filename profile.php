@@ -27,7 +27,7 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
             echo $resoult['imie']." ".$resoult['nazwisko'];
 
             ?>
-            <a href="logout.php"><button>Wyloguj się</button></a>
+            <a href="logout.php"><button class="logout">Wyloguj się</button></a>
         </h2>
         <a href="profileEdit.php"><input type="button" value="Zmień login/hasło"></a>
         <a href="czynsze.php"><input type="button" value="Czynsze" disabled></a>

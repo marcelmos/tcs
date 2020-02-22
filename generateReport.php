@@ -2,7 +2,7 @@
 <?php
 session_start();
 $typKonta = $_SESSION['typKonta'];
-    
+
 if($typKonta[0] != "1"){
     header("Location: logout.php");         //Check if client token is is admin
 }
@@ -16,10 +16,11 @@ if($typKonta[0] != "1"){
 <body>
     <div class="top">
         <h2>Kreator raportów
-            <a href="logout.php"><button>Wyloguj się</button></a>
+            <a href="logout.php"><button class="logout">Wyloguj się</button></a>
         </h2>
         <a href="adminProfile.php"><input type="button" value="Wróć do Panelu Głównego"></a>
         <a href="profileEdit.php"><input type="button" value="Zmień login/hasło"></a>
+        <a href="accountManager.php"><input type="button" value="Menedżer kont"></a>
         <a href="createUser.php"><input type="button" value="Kreator użytkownik"></a>
     </div>
 

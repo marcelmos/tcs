@@ -20,7 +20,7 @@ option:nth-child(2n+1) {
 	background-color: #8db3c6;
 }
 
-button{
+.logout{
     background-color: #a51b1b;
     border: none;
     color: #fff;
@@ -122,6 +122,10 @@ tr:nth-child(2n+1) {
 
 .error{
     color: #fa1515;
+}
+
+.info{
+    color: #0fa2f0;
 }
 
 .correct{
