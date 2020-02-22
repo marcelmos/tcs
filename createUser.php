@@ -1,7 +1,7 @@
 <html>
 <?php
 session_start();
-$typKonta = $_SESSION['typKonta'];
+$typKonta[0] = $_SESSION['typKonta'];
 
 if($typKonta[0] != "1"){
     header("Location: logout.php");         //Check if client token is is admin
@@ -33,7 +33,7 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
     <div class="main-full">
         <div class="alert"><h2>UWAGA</h2>Nie należy odświerzać strony po wprowadzeniu wartości w pola.</div>
 
-        <form action="createUser.php" method="post">
+        <form method="post">
             Dane lokatora:<br>
             <br>
             Imie: <br>
@@ -45,28 +45,40 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
             <br>
             Login: <br>
             <input type="text" name="login"><br>
+            <?php
+                if(isset($_SESSION['e_login'])){
+                    echo "<div class='error'>".$_SESSION['e_login']."</div>";
+                    unset($_SESSION['e_login']);
+                }
+            ?>
             Hasło: <br>
-            <input type="password" name="password" onchange="check()"><br>
+            <input type="password" name="password"><br>
+            <?php
+                if(isset($_SESSION['e_newPass'])){
+                    echo "<div class='error'>".$_SESSION['e_pass']."</div>";
+                    unset($_SESSION['e_newPass']);
+                }
+            ?>
             Powtórz hasło: <br>
-            <input type="password" name="password" onchange="check()"><br>
+            <input type="password" name="repPassword"><br>
             Typ konta:<br>
             <select name="idKonta">
                 <option value="2">Lokator</option>
                 <option value="1">Administrator</option>
             </select><br>
             <br>
-            <input type="submit" id="submit" disabled>
+            <input type="submit">
         </form>
         <?php
-            if(isset($_SESSION["usrCreated"])){
-                echo $_SESSION["usrCreated"];
-                unset($_SESSION["usrCreated"]);
-            }else if(isset($_SESSION["err_usrCreate"])){
-                echo $_SESSION["err_usrCreate"];
-                unset($_SESSION["err_usrCreated"]);
-            }else{
-                echo "";
-            }
+            // if(isset($_SESSION["usrCreated"])){
+            //     echo $_SESSION["usrCreated"];
+            //     unset($_SESSION["usrCreated"]);
+            // }else if(isset($_SESSION["err_usrCreate"])){
+            //     echo $_SESSION["err_usrCreate"];
+            //     unset($_SESSION["err_usrCreated"]);
+            // }else{
+            //     echo "";
+            // }
         ?>
 
     </div>
@@ -83,7 +95,7 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
     </div>
 -->
 </body>
-<script>
+<!-- <script>
     function check(){
         var password = document.getElementsByName("password")[0].value;
         var checkPass = document.getElementsByName("password")[1].value;
@@ -98,32 +110,61 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
             document.getElementById("submit").disabled = true;
         }
     }
-</script>
+</script> -->
 <?php
+    if(isset($_POST['login'])){
+        $firstName = $_POST['firstName'];
+        $lastName = $_POST['lastName'];
+        $login = $_POST['login'];
+        $pass = $_POST['password'];
+        $repPass = $_POST['repPassword'];
+        $accountType = $_POST['idKonta'];
 
-    $firstName = $_POST['firstName'];
-    $lastName = $_POST['lastName'];
-    $login = $_POST['login'];
-    $pass = $_POST['password'];
-    $accountType = $_POST['idKonta'];
+        $all_OK = true;
 
-    $newPass_hash = password_hash($pass, PASSWORD_DEFAULT);
+        $newPass_hash = password_hash($pass, PASSWORD_DEFAULT);
 
 
-    $checkResoult = mysqli_query($db, "INSERT INTO lokatorzy(imie, nazwisko, login, haslo, typKonta_id) VALUES ('$firstName', '$lastName','$login','$newPass_hash','$accountType')"); //Create new account
+        // $checkResoult = mysqli_query($db, "INSERT INTO lokatorzy(imie, nazwisko, login, haslo, typKonta_id) VALUES ('$firstName', '$lastName','$login','$newPass_hash','$accountType')"); //Create new account
 
-    //User creating status
-    //ERROR odwrotnie działa. Pomyślnie wykonane = błąd
-    if($checkResoult == true){
-        $_SESSION["usrCreated"] = "<br><br><div class='correct'>Użytkownik <b>$firstName $lastName</b> utworzony pomyślnie</div>";
-        header("Location: createUser.php");
-        exit();
-    }else if($checkResoult == false){
-        $_SESSION["err_usrCreate"] = "<br><br><div class='error'>Wystąpił błąd przy tworzeniu nowego użytkownika</div>";
+         //Check login
+         if((strlen($login)<3) || (strlen($login)>20)){
+            $all_OK = false;
+            $_SESSION['e_login'] = "Login musi posiadać od 3 do 20 znaków!";
+        }
+
+        if(ctype_alnum($newLogin)==false){
+            $all_OK = false;
+            $_SESSION['e_login'] = "Login może składać się wyłącznie z liter i cyfr (bez polskich znaków)";
+        }
+
+        //Check new password
+        if((strlen($pass)<8) || (strlen($pass)>20)){
+            $all_OK = false;
+            $_SESSION['e_pass'] = "Hasło musi posiadać od 8 do 20 znaków!";
+        }
+
+        if($pass != $repPass){
+            $all_OK = false;
+            $_SESSION['e_pass'] = "Podane hasła nie są identyczne!";
+        }
+
+        //Create account
+        if(all_OK==true){
+            mysqli_query($db, "INSERT INTO lokatorzy(imie, nazwisko, login, haslo, typKonta_id) VALUES ('$firstName', '$lastName','$login','$newPass_hash','$accountType')"); //Create new account
+            $_SESSION["usrCreated"] = "<br><br><div class='correct'>Użytkownik <b>$firstName $lastName</b> utworzony pomyślnie</div>";
+            header("Location: createUser.php");
+            exit();
+        }
+
+        if(all_OK==false){
+            $_SESSION["err_usrCreate"] = "<br><br><div class='error'>Wystąpił błąd przy tworzeniu nowego użytkownika</div>";
+            header("Location: createUser.php");
+            exit();
+        }
+
+        mysqli_close($db);
     }
-
-    mysqli_close($db);
-
 //    if($succes == true){
 //        echo "Urzytkownik utworzony poprawnie.";
 //    }else if($succes == false){

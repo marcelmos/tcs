@@ -1,7 +1,7 @@
 <?php
 session_start();
-$clientId = $_SESSION['clientToken'];       //Client individual ID
-$typKonta = $_SESSION['typKonta'];          //Account type
+$clientId[0] = $_SESSION['clientToken'];       //Client individual ID
+$typKonta[0] = $_SESSION['typKonta'];          //Account type
 
 //Connect to DB
 require_once('db_ini.php');

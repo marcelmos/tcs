@@ -1,7 +1,7 @@
 <html>
 <?php
 session_start();
-$clientId = $_SESSION['clientToken'];       //Data as array
+$clientId[0] = $_SESSION['clientToken'];       //Data as array
 
 //Connect to DB
 require_once('db_ini.php');
@@ -21,10 +21,10 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
             <?php
 //            $clientId = $_SESSION['clientToken'];       //Data as array
 
-            $query = mysqli_query($db, "SELECT imie, nazwisko FROM lokatorzy WHERE id = '$clientId[0]'");
+            $query = mysqli_query($db, "SELECT id, imie, nazwisko FROM lokatorzy WHERE id = ".$clientId[0]."");
             $resoult = mysqli_fetch_array($query);
 
-            echo $resoult['imie']." ".$resoult['nazwisko'];
+            echo $resoult['imie']." ".$resoult['nazwisko']." ".$resoult['id'];
 
             ?>
             <a href="logout.php"><button class="logout">Wyloguj się</button></a>

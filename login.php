@@ -17,7 +17,7 @@ if((!isset($_POST['login'])) || (!isset($_POST['password']))){                  
     $passw = $_POST['password'];
     // $passw = password_hash($passw, PASSWORD_DEFAULT); //Convert password to hash
 
-    $query = mysqli_query($db, "SELECT id, typKonta_id, login, haslo FROM lokatorzy WHERE (login = '$login')");
+    $query = mysqli_query($db, "SELECT id, typKonta_id, login, haslo FROM lokatorzy WHERE login = '$login'");
     $resoult = mysqli_fetch_array($query);
 
     if(($resoult["login"] == $login) && (password_verify($passw, $resoult["haslo"]))){
@@ -30,7 +30,7 @@ if((!isset($_POST['login'])) || (!isset($_POST['password']))){                  
         }else if($resoult[1] == "2"){
             header("Location: profile.php");
         }
-       $query = mysqli_query($db, "SELECT imie, nazwisko");
+    //    $query = mysqli_query($db, "SELECT imie, nazwisko");
     //    echo "Poprawne zalogowanie do użytkownika ".
     }else{
         header("Location: loginError.html");
