@@ -1,0 +1,14 @@
+######### v1.3b #########
+
+>Dodano:
+    -Przycisk z aktualną wersją programu, wraz z listą zmian.
+
+>Fix:
+    -Brak
+
+>Zmieniono:
+    -Wyświetlanie wartości do dwóch miejsc po przecinku (1.5 -> 1.50)
+    -Wyliczanie sumy z różnicy w wygenerowanym raporcie
+
+>Usunięto:
+    -[UKRYTE] Tabela z najnowszymi wartościami względem aktualnego miesiąca.

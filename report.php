@@ -82,7 +82,7 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
 
             $sumValue += $difference;
         }
-        echo "<tr><td colspan='3'></td> <th>Średnia: </th> <td>".number_format($sumValue, 2)."m<sup>3</sup></td></tr>";
+        echo "<tr><td colspan='3'></td> <th>Suma: </th> <td>".number_format($sumValue, 2)."m<sup>3</sup></td></tr>";
         mysqli_close($db);
         ?>
 
