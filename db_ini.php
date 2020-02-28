@@ -1,7 +1,7 @@
 <?php
 
 $host = "localhost";
-$db = "lokatorzynew";
+$db = "lokatorzy_db";
 $db_user = "root";
 $db_pass = "";
 

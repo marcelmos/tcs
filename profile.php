@@ -24,7 +24,7 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
             $query = mysqli_query($db, "SELECT id, imie, nazwisko FROM lokatorzy WHERE id = ".$clientId[0]."");
             $resoult = mysqli_fetch_array($query);
 
-            echo $resoult['imie']." ".$resoult['nazwisko']." ".$resoult['id'];
+            echo $resoult['imie']." ".$resoult['nazwisko'];
 
             ?>
             <a href="logout.php"><button class="logout">Wyloguj się</button></a>
@@ -91,7 +91,7 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
 
 //                $clientId = $_SESSION['clientToken'];       //Data as array
 
-                $query = mysqli_query($db, "SELECT stanLicznika, dataOdczytu FROM dane WHERE idLokatora = '$clientId[0]' ORDER BY dataOdczytu ASC");
+                $query = mysqli_query($db, "SELECT ROUND(stanLicznika, 2) AS stanLicznika, dataOdczytu FROM dane WHERE idLokatora = '$clientId[0]' ORDER BY dataOdczytu ASC");
 
 //                $resoult = mysqli_fetch_array($query);
                 $lastValue = 0;
@@ -108,7 +108,7 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
                     <td>".$lastValue."</td>
                     <td>".$resoult['stanLicznika']."m<sup>3</sup></td>
                     <td>".$resoult['dataOdczytu']."</td>
-                    <td>".$difference."m<sup>3</sup></td></tr>";
+                    <td>".number_format($difference, 2)."m<sup>3</sup></td></tr>";
 
                     $lastValue = $resoult['stanLicznika'];
                 }

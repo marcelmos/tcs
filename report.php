@@ -1,10 +1,10 @@
 <html>
 <?php
 session_start();
-$typKonta[0] = $_SESSION['typKonta'];
+$typKonta = $_SESSION['typKonta'];
 
 if($typKonta[0] != "1"){
-    header("Location: logout.php");         //Check if client token is is admin
+    header("Location: logout.php");
 }
 
 //Connect to DB
@@ -37,14 +37,12 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
         $difference = 0;
         //$lastValue = 0;
         $sumValue = 0;
-        $x = 0;
 
-        $query = mysqli_query($db, "SELECT lokatorzy.imie, lokatorzy.nazwisko, idLokatora, stanLicznika, dataOdczytu FROM dane JOIN lokatorzy ON dane.idLokatora = lokatorzy.id WHERE dataOdczytu >= '$year-$month-01' AND dataOdczytu <= '$year-$month-31' ORDER BY dataOdczytu ASC");
+        $query = mysqli_query($db, "SELECT lokatorzy.imie, lokatorzy.nazwisko, idLokatora, ROUND(stanLicznika, 2) AS stanLicznika, dataOdczytu FROM dane JOIN lokatorzy ON dane.idLokatora = lokatorzy.id WHERE dataOdczytu >= '$year-$month-01' AND dataOdczytu <= '$year-$month-31' ORDER BY dataOdczytu ASC");
 
 //        $resoult = mysqli_fetch_array($query);
 
         while($resoult = mysqli_fetch_array($query)){
-            $x++; //Auto incrementation
 //            $lastValue = array(0); //Setting var
 
             if($month = "01"){
@@ -54,7 +52,7 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
                 $prevYearMonth = (($year-1)."-".($month-1));
             }
 
-            $queryLast = mysqli_query($db, "SELECT stanLicznika FROM dane WHERE idLokatora = ".$resoult['idLokatora']." AND (dataOdczytu BETWEEN '$prevYearMonth-01' AND '$prevYearMonth-31') GROUP BY dataOdczytu ASC");
+            $queryLast = mysqli_query($db, "SELECT ROUND(stanLicznika, 2) AS stanLicznika FROM dane WHERE idLokatora = ".$resoult['idLokatora']." AND (dataOdczytu BETWEEN '$prevYearMonth-01' AND '$prevYearMonth-31') GROUP BY dataOdczytu ASC");
 
 //            $queryLast = mysqli_query($db, "SELECT stanLicznika FROM dane JOIN lokatorzy ON  dane.idLokatora = lokatorzy.id WHERE lokatorzy.id = ".$resoult['id']." AND (dataOdczytu >= '$prevYearMonth-01' AND dataOdczytu <= '$prevYearMonth-31') GROUP BY dataOdczytu DESC");
 
@@ -80,11 +78,11 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
                 <td>".$lastValueShow."</td>
                 <td>".$resoult['stanLicznika']."m<sup>3</sup></td>
                 <td>".$resoult['dataOdczytu']."</td>
-                <td>".$difference."m<sup>3</sup></td></tr>";
+                <td>".number_format($difference, 2)."m<sup>3</sup></td></tr>";
 
-            $sumValue = ($resoult['stanLicznika']-$lastValueInt);
+            $sumValue += $difference;
         }
-        echo "<tr><td colspan='3'></td> <th>Średnia: </th> <td>".($sumValue/$x)."m<sup>3</sup></td></tr>";
+        echo "<tr><td colspan='3'></td> <th>Średnia: </th> <td>".number_format($sumValue, 2)."m<sup>3</sup></td></tr>";
         mysqli_close($db);
         ?>
 

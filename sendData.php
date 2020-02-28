@@ -11,7 +11,7 @@ $dataOdczytu = date("Y-m-d");
 
 
 if(($stanLicznika >= 0)&&($stanLicznika <= 99999)){
-    $query = mysqli_query($db, "INSERT INTO dane (idLokatora, stanLicznika, dataOdczytu) VALUES ('$clientId[0]', '$stanLicznika', '$dataOdczytu')");
+    $query = mysqli_query($db, "INSERT INTO dane (idLokatora, stanLicznika, dataOdczytu) VALUES ('$clientId[0]', ROUND($stanLicznika, 2), '$dataOdczytu')");
     echo "Klient: ".$clientId[0]." Stan Licznika: ".$stanLicznika." Data odczytu: ".$dataOdczytu;
     // $_SESSION['clientToken'] = $clientId;
     header("Location: profile.php");

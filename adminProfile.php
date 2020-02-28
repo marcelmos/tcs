@@ -31,7 +31,7 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
 
     <div class="main-full">
 
-       <h3>Najnowsze odczyty</h3>
+       <!-- <h3>Najnowsze odczyty</h3>
        <table>
             <tr>
                 <td class="hide">ID</td>
@@ -43,7 +43,7 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
             </tr>
 
             <?php
-
+            /*
 
             $dateNow = date("Y-m");
             $difference = 0;
@@ -97,8 +97,9 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
             }
             echo "<tr><td colspan='3'></td> <th>Średnia: </th> <td>".($sumValue/$x)."m<sup>3</sup></td></tr>";
 
+            */
            ?>
-        </table>
+        </table> -->
 
        <h3>Historia odczytów</h3>
         <table>
@@ -152,7 +153,7 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
 
             $clientId = $_SESSION['clientToken'];       //Data as array
 
-            $query = mysqli_query($db, "SELECT lokatorzy.id, lokatorzy.imie, lokatorzy.nazwisko, stanLicznika, dataOdczytu FROM dane JOIN lokatorzy ON  dane.idLokatora = lokatorzy.id ORDER BY concat(lokatorzy.id, lokatorzy.nazwisko) ASC, dataOdczytu ASC");
+            $query = mysqli_query($db, "SELECT lokatorzy.id, lokatorzy.imie, lokatorzy.nazwisko, ROUND(stanLicznika, 2) AS stanLicznika, dataOdczytu FROM dane JOIN lokatorzy ON  dane.idLokatora = lokatorzy.id ORDER BY concat(lokatorzy.id, lokatorzy.nazwisko) ASC, dataOdczytu ASC");
 //                $resoult = mysqli_fetch_array($query);
 
             $idLokatora = 0;
@@ -177,7 +178,7 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
                 <td id='lastValue'>".$lastValue."</td>
                 <td id='newValue'>".$resoult['stanLicznika']."m<sup>3</sup></td>
                 <td>".$resoult['dataOdczytu']."</td>
-                <td>".$difference."m<sup>3</sup></td></tr>";
+                <td>".number_format($difference, 2)."m<sup>3</sup></td></tr>";
 
 
                 $lastValue = $resoult['stanLicznika'];
