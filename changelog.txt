@@ -27,3 +27,14 @@
 
 >Inne:
     -Ukryto sortowanie po stronie lokatora.
+
+######### v1.5 #########
+
+>Dodano:
+    -Przyciski akcji na rekordach [nie działa]
+
+>Fix:
+    -Brak
+
+>Zmieniono:
+    -Brak

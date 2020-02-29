@@ -104,7 +104,7 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
         </table> -->
 
        <h3>Historia odczytów</h3>
-        
+
         <p>Filtruj dane według:
             <form method="post">
                 Lokatorzy:
@@ -135,6 +135,7 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
                 <th>Najnowszy Stan Licznika</th>
                 <th>Data Najnowszego Odczytu<br></th>
                 <th>Różnica</th>
+                <th>Akcje</th>
             </tr>
             <?php
                 $clientId = $_SESSION['clientToken'];       //Data as array
@@ -142,7 +143,7 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
                 if($_POST['filterSubmit'] && (($_POST['filterLokator'] != "0")||($_POST['filterDate'] != "0"))){
 
                     $filterLokator = $_POST['filterLokator'];
-                    $query = mysqli_query($db, "SELECT lokatorzy.id, lokatorzy.imie, lokatorzy.nazwisko, ROUND(stanLicznika, 2) AS stanLicznika, dataOdczytu FROM dane JOIN lokatorzy ON  dane.idLokatora = lokatorzy.id WHERE idLokatora = $filterLokator ORDER BY concat(lokatorzy.id, lokatorzy.nazwisko) ASC, dataOdczytu ASC");
+                    $query = mysqli_query($db, "SELECT lokatorzy.id, lokatorzy.imie, lokatorzy.nazwisko, ROUND(stanLicznika, 2) AS stanLicznika, dataOdczytu, id FROM dane JOIN lokatorzy ON  dane.idLokatora = lokatorzy.id WHERE idLokatora = $filterLokator ORDER BY concat(lokatorzy.id, lokatorzy.nazwisko) ASC, dataOdczytu ASC");
         //                $resoult = mysqli_fetch_array($query);
 
                     $idLokatora = 0;
@@ -166,13 +167,15 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
                         <td id='lastValue'>".$lastValue."</td>
                         <td id='newValue'>".$resoult['stanLicznika']."m<sup>3</sup></td>
                         <td>".$resoult['dataOdczytu']."</td>
-                        <td>".number_format($difference, 2)."m<sup>3</sup></td></tr>";
+                        <td>".number_format($difference, 2)."m<sup>3</sup></td>
+                        <td><input type='button' class='btnEdit' value='Edytuj'>  <input type='button' class='btnDelete' value='Usuń'></td>
+                        </tr>";
 
                         $lastValue = $resoult['stanLicznika'];
                     }
                 }
                 else{
-                    $query = mysqli_query($db, "SELECT lokatorzy.id, lokatorzy.imie, lokatorzy.nazwisko, ROUND(stanLicznika, 2) AS stanLicznika, dataOdczytu FROM dane JOIN lokatorzy ON  dane.idLokatora = lokatorzy.id ORDER BY concat(lokatorzy.id, lokatorzy.nazwisko) ASC, dataOdczytu ASC");
+                    $query = mysqli_query($db, "SELECT lokatorzy.id, lokatorzy.imie, lokatorzy.nazwisko, ROUND(stanLicznika, 2) AS stanLicznika, dataOdczytu, id FROM dane JOIN lokatorzy ON  dane.idLokatora = lokatorzy.id ORDER BY concat(lokatorzy.id, lokatorzy.nazwisko) ASC, dataOdczytu ASC");
         //                $resoult = mysqli_fetch_array($query);
 
                     $idLokatora = 0;
@@ -196,7 +199,9 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
                         <td id='lastValue'>".$lastValue."</td>
                         <td id='newValue'>".$resoult['stanLicznika']."m<sup>3</sup></td>
                         <td>".$resoult['dataOdczytu']."</td>
-                        <td>".number_format($difference, 2)."m<sup>3</sup></td></tr>";
+                        <td>".number_format($difference, 2)."m<sup>3</sup></td>
+                        <td><input type='button' class='btnEdit' value='Edytuj'>  <input type='button' name='delete' class='btnDelete' value='Usuń'></td>
+                        </tr>";
 
                         $lastValue = $resoult['stanLicznika'];
                     }

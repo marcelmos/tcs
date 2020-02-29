@@ -120,6 +120,22 @@ tr:nth-child(2n+1) {
     float: right;
 }
 
+.btnDelete{
+    background: #a01f1f;
+    color: #fff;
+    padding: 5px;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.btnEdit{
+    background: #326132;
+    color: #fff;
+    padding: 5px;
+    font-weight: bold;
+    font-size: 16px;
+}
+
 .error{
     color: #fa1515;
 }
