@@ -38,21 +38,24 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
         //$lastValue = 0;
         $sumValue = 0;
 
-        $query = mysqli_query($db, "SELECT lokatorzy.imie, lokatorzy.nazwisko, idLokatora, ROUND(stanLicznika, 2) AS stanLicznika, dataOdczytu FROM dane JOIN lokatorzy ON dane.idLokatora = lokatorzy.id WHERE dataOdczytu >= '$year-$month-01' AND dataOdczytu <= '$year-$month-31' ORDER BY dataOdczytu ASC");
+        $query = mysqli_query($db, "SELECT lokatorzy.imie, lokatorzy.nazwisko, idLokatora, ROUND(stanLicznika, 2) AS stanLicznika, dataOdczytu FROM dane JOIN lokatorzy ON dane.idLokatora = lokatorzy.id WHERE  MONTH(dataOdczytu) = '$month'  and YEAR(dataOdczytu) = '$year' ORDER BY dataOdczytu ASC");
 
 //        $resoult = mysqli_fetch_array($query);
 
         while($resoult = mysqli_fetch_array($query)){
 //            $lastValue = array(0); //Setting var
 
-            if($month = "01"){
-                $prevYearMonth = (($year-1)."-12");
-//                $year -= 1;
-            }else{
-                $prevYearMonth = (($year-1)."-".($month-1));
+            if($month == "01"){
+                $prevMonth = 12;
+                $prevYear = ($year-1);
+            }
+            if($month != "01"){
+                $prevMonth = ($month-1);
+                $prevYear = $year;
             }
 
-            $queryLast = mysqli_query($db, "SELECT ROUND(stanLicznika, 2) AS stanLicznika FROM dane WHERE idLokatora = ".$resoult['idLokatora']." AND (dataOdczytu BETWEEN '$prevYearMonth-01' AND '$prevYearMonth-31') GROUP BY dataOdczytu ASC");
+            //$queryLast = mysqli_query($db, "SELECT ROUND(stanLicznika, 2) AS stanLicznika FROM dane WHERE idLokatora = '".$resoult['idLokatora']."' AND MONTH(dataOdczytu) = '$prevMonth' and YEAR(dataOdczytu) = '$prevYear' GROUP BY dataOdczytu ASC");
+            $queryLast = mysqli_query($db, "SELECT ROUND(stanLicznika, 2) AS stanLicznika FROM dane WHERE idLokatora = '".$resoult['idLokatora']."' AND MONTH(dataOdczytu) = '$prevMonth' and YEAR(dataOdczytu) = '$prevYear' GROUP BY dataOdczytu ASC");
 
 //            $queryLast = mysqli_query($db, "SELECT stanLicznika FROM dane JOIN lokatorzy ON  dane.idLokatora = lokatorzy.id WHERE lokatorzy.id = ".$resoult['id']." AND (dataOdczytu >= '$prevYearMonth-01' AND dataOdczytu <= '$prevYearMonth-31') GROUP BY dataOdczytu DESC");
 

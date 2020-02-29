@@ -10,5 +10,20 @@
     -Wyświetlanie wartości do dwóch miejsc po przecinku (1.5 -> 1.50)
     -Wyliczanie sumy z różnicy w wygenerowanym raporcie
 
->Usunięto:
-    -[UKRYTE] Tabela z najnowszymi wartościami względem aktualnego miesiąca.
+>Inne:
+    -Ukryto tabele z najnowszymi wartościami względem aktualnego miesiąca.
+
+######### v1.4 #########
+
+>Dodano:
+    -Filtrowanie danych po lokatorach na koncie administratora.
+    -Szablon wprowadzania nowych danych na koncie lokator.
+
+>Fix:
+    -Brak
+
+>Zmieniono:
+    -Wygląd tabeli z historią danych.
+
+>Inne:
+    -Ukryto sortowanie po stronie lokatora.

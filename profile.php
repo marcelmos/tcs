@@ -38,7 +38,7 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
         <form action="sendData.php" method="post">
             <h3>Wprowadź nowy odczyt</h3>
             Stan licznika:<br>
-            <input type="number" step="0.01" name="licznik">m<sup>3</sup>&nbsp;&nbsp;&nbsp;&nbsp;
+            <input type="number" step="0.01" name="licznik" placeholder="1234,56">m<sup>3</sup>&nbsp;&nbsp;&nbsp;&nbsp;
             <!-- Data odczytu:<br>
             <input type="date" name="data"><br> -->
             <input type="submit" value="Wyślij">
@@ -63,7 +63,7 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
                 <th>Data Najnowszego Odczytu<br><small>Format daty rok-miesiąc-dzień</small></th>
                 <th>Różnica</th>
             </tr>
-            <tr>
+            <!--<tr>
                 <td>
                     <select name="sortStan" onchange="sortStan()" disabled>
                         <option value="0">sortuj</option>
@@ -86,7 +86,7 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
                     </select>
                 </td>
                 <td></td>
-            </tr>
+            </tr>--->
             <?php
 
 //                $clientId = $_SESSION['clientToken'];       //Data as array

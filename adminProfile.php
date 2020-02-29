@@ -1,5 +1,6 @@
 <html>
 <?php
+error_reporting(E_ALL ^ E_NOTICE);      //Hide notices ENABLE IF PUBLIC
 session_start();
 $typKonta[0] = $_SESSION['typKonta'];
 
@@ -27,7 +28,7 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
         <a href="createUser.php"><input type="button" value="Kreator użytkownik"></a>
         <a href="accountManager.php"><input type="button" value="Menedżer kont"></a>
         <a href="generateReport.php"><input type="button" value="Kreator raportów"></a>
-        <a href="changelog.txt" target="_blank"><input type="button" value="[v1.3b] Lista zmian"></a>
+        <a href="changelog.txt" target="_blank"><input type="button" value="[v1.4] Lista zmian"></a>
     </div>
 
     <div class="main-full">
@@ -103,89 +104,104 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
         </table> -->
 
        <h3>Historia odczytów</h3>
+        
+        <p>Filtruj dane według:
+            <form method="post">
+                Lokatorzy:
+                <select name="filterLokator">
+                    <option value="0">Brak</option>
+                    <?php
+                    $query = mysqli_query($db, "SELECT id, imie, nazwisko FROM lokatorzy WHERE typKonta_id = 2");
+                    while($resoult = mysqli_fetch_array($query)){
+                        echo "<option value=".$resoult['id'].">".$resoult['imie']." ".$resoult['nazwisko']."</option>";
+                    }
+                    ?>
+                </select>&nbsp;&nbsp;
+                Data:
+                <select name="filterDate">
+                    <option value="0">Brak</option>
+                    <option value=""></option>
+                    <option value=""></option>
+                </select>
+                <input type="submit" name="filterSubmit" value="Filtruj dane">
+            </form>
+        </p>
+
         <table>
             <tr>
                 <td class="hide">ID</td>
                 <th>Imię i Nazwisko</th>
                 <th>Poprzedni Stan Licznika</th>
                 <th>Najnowszy Stan Licznika</th>
-                <th>Data Najnowszego Odczytu<br><small>Format daty rok-miesiąc-dzień</small></th>
+                <th>Data Najnowszego Odczytu<br></th>
                 <th>Różnica</th>
             </tr>
-            <tr>
-                <td class="hide"></td>
-                <td>
-                    <select name="sortLokator" onchange="sortLokator(this.value)">
-                        <option value="0">sortuj</option>
-                        <?php
+            <?php
+                $clientId = $_SESSION['clientToken'];       //Data as array
 
-                        $query = mysqli_query($db, "SELECT id, imie, nazwisko FROM lokatorzy");
-                        while($resoult = mysqli_fetch_array($query)){
-                            echo "<option value=".$resoult['id'].">".$resoult['imie']." ".$resoult['nazwisko']."</option>";
+                if($_POST['filterSubmit'] && (($_POST['filterLokator'] != "0")||($_POST['filterDate'] != "0"))){
+
+                    $filterLokator = $_POST['filterLokator'];
+                    $query = mysqli_query($db, "SELECT lokatorzy.id, lokatorzy.imie, lokatorzy.nazwisko, ROUND(stanLicznika, 2) AS stanLicznika, dataOdczytu FROM dane JOIN lokatorzy ON  dane.idLokatora = lokatorzy.id WHERE idLokatora = $filterLokator ORDER BY concat(lokatorzy.id, lokatorzy.nazwisko) ASC, dataOdczytu ASC");
+        //                $resoult = mysqli_fetch_array($query);
+
+                    $idLokatora = 0;
+                    while($resoult = mysqli_fetch_array($query)){
+
+                        if ($idLokatora!=$resoult[0])
+                        {
+                            $lastValue = 0;
+                            $difference = 0;
+                            $idLokatora=$resoult[0];
+                        }
+                        if($lastValue > 0){
+                            $difference = $resoult['stanLicznika'] - $lastValue;
+                            $lastValue = $lastValue."m<sup>3</sup>";
+                        }else{
+                            $lastValue = "Brak Danych";
                         }
 
-                        ?>
-                    </select>
-                </td>
-                <td>
-                    <select name="sortStan" onchange="sortStan()">
-                        <option value="0">sortuj</option>
-                        <option value="1">sortuj od najniższej</option>
-                        <option value="2">sortuj od najwyższej</option>
-                    </select>
-                </td>
-                <td>
-                    <select name="sortDate" onchange="sortDate()">
-                        <option value="0">sortuj</option>
-                        <option value="1">sortuj od najstarszych</option>
-                        <option value="2">sortuj od najnowszych</option>
-                    </select>
-                </td>
-                <td>
-                    <select name="sortKoszt" onchange="sortKoszt()">
-                        <option value="0">sortuj</option>
-                        <option value="1">sortuj od najniższej</option>
-                        <option value="2">sortuj od najwyższej</option>
-                    </select>
-                </td>
-                <td></td>
-            </tr>
-            <?php
+                        echo "<tr><td class='hide' id='change'>".$resoult['id']."</td>
+                        <td>".$resoult['imie']." ".$resoult['nazwisko']."</td>
+                        <td id='lastValue'>".$lastValue."</td>
+                        <td id='newValue'>".$resoult['stanLicznika']."m<sup>3</sup></td>
+                        <td>".$resoult['dataOdczytu']."</td>
+                        <td>".number_format($difference, 2)."m<sup>3</sup></td></tr>";
 
-            $clientId = $_SESSION['clientToken'];       //Data as array
-
-            $query = mysqli_query($db, "SELECT lokatorzy.id, lokatorzy.imie, lokatorzy.nazwisko, ROUND(stanLicznika, 2) AS stanLicznika, dataOdczytu FROM dane JOIN lokatorzy ON  dane.idLokatora = lokatorzy.id ORDER BY concat(lokatorzy.id, lokatorzy.nazwisko) ASC, dataOdczytu ASC");
-//                $resoult = mysqli_fetch_array($query);
-
-            $idLokatora = 0;
-            while($resoult = mysqli_fetch_array($query)){
-
-                if ($idLokatora!=$resoult[0])
-                {
-                    $lastValue = 0;
-                    $difference = 0;
-                    $idLokatora=$resoult[0];
+                        $lastValue = $resoult['stanLicznika'];
+                    }
                 }
-                if($lastValue > 0){
-                    $difference = $resoult['stanLicznika'] - $lastValue;
-                    $lastValue = $lastValue."m<sup>3</sup>";
-                }else{
-                    $lastValue = "Brak Danych";
+                else{
+                    $query = mysqli_query($db, "SELECT lokatorzy.id, lokatorzy.imie, lokatorzy.nazwisko, ROUND(stanLicznika, 2) AS stanLicznika, dataOdczytu FROM dane JOIN lokatorzy ON  dane.idLokatora = lokatorzy.id ORDER BY concat(lokatorzy.id, lokatorzy.nazwisko) ASC, dataOdczytu ASC");
+        //                $resoult = mysqli_fetch_array($query);
+
+                    $idLokatora = 0;
+                    while($resoult = mysqli_fetch_array($query)){
+
+                        if ($idLokatora!=$resoult[0])
+                        {
+                            $lastValue = 0;
+                            $difference = 0;
+                            $idLokatora=$resoult[0];
+                        }
+                        if($lastValue > 0){
+                            $difference = $resoult['stanLicznika'] - $lastValue;
+                            $lastValue = $lastValue."m<sup>3</sup>";
+                        }else{
+                            $lastValue = "Brak Danych";
+                        }
+
+                        echo "<tr><td class='hide' id='change'>".$resoult['id']."</td>
+                        <td>".$resoult['imie']." ".$resoult['nazwisko']."</td>
+                        <td id='lastValue'>".$lastValue."</td>
+                        <td id='newValue'>".$resoult['stanLicznika']."m<sup>3</sup></td>
+                        <td>".$resoult['dataOdczytu']."</td>
+                        <td>".number_format($difference, 2)."m<sup>3</sup></td></tr>";
+
+                        $lastValue = $resoult['stanLicznika'];
+                    }
                 }
-
-
-                echo "<tr><td class='hide' id='change'>".$resoult['id']."</td>
-                <td>".$resoult['imie']." ".$resoult['nazwisko']."</td>
-                <td id='lastValue'>".$lastValue."</td>
-                <td id='newValue'>".$resoult['stanLicznika']."m<sup>3</sup></td>
-                <td>".$resoult['dataOdczytu']."</td>
-                <td>".number_format($difference, 2)."m<sup>3</sup></td></tr>";
-
-
-                $lastValue = $resoult['stanLicznika'];
-            }
-
-            mysqli_close($db);
+                mysqli_close($db);
             ?>
         </table>
     </div>

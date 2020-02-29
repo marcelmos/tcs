@@ -14,9 +14,10 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
 ?>
 <head>
     <meta charset="utf-8">
-    <title>Meneżer Kont</title>
+    <title>Menedżer Kont</title>
     <link rel="stylesheet" href="styl.css">
-    <script src="https://kit.fontawesome.com/cbb96ef56b.js" crossorigin="anonymous"></script>
+    <!--- Icons --->
+    <!-- <script src="https://kit.fontawesome.com/cbb96ef56b.js" crossorigin="anonymous"></script> -->
 </head>
 
 <body>
