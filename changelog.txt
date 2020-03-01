@@ -31,7 +31,7 @@
 ######### v1.5 #########
 
 >Dodano:
-    -Przyciski akcji na rekordach [nie działa]
+    -Przyciski akcji na rekordach [nie działa] (Usuwanie działa 'jakoś'...)
 
 >Fix:
     -Brak

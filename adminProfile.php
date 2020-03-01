@@ -127,88 +127,104 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
             </form>
         </p>
 
-        <table>
-            <tr>
-                <td class="hide">ID</td>
-                <th>Imię i Nazwisko</th>
-                <th>Poprzedni Stan Licznika</th>
-                <th>Najnowszy Stan Licznika</th>
-                <th>Data Najnowszego Odczytu<br></th>
-                <th>Różnica</th>
-                <th>Akcje</th>
-            </tr>
-            <?php
-                $clientId = $_SESSION['clientToken'];       //Data as array
+        <?php
+            if(isset($_SESSION['i_action'])){
+                echo "<div class='correct' style='text-align: center;'>".$_SESSION['i_action']."</div>";
+                unset($_SESSION['i_action']);
+            }
+        ?>
 
-                if($_POST['filterSubmit'] && (($_POST['filterLokator'] != "0")||($_POST['filterDate'] != "0"))){
+        <form method="post">
+            <table>
+                <tr>
+                    <td class="hide">ID</td>
+                    <th>Imię i Nazwisko</th>
+                    <th>Poprzedni Stan Licznika</th>
+                    <th>Najnowszy Stan Licznika</th>
+                    <th>Data Najnowszego Odczytu<br></th>
+                    <th>Różnica</th>
+                    <th>Akcje</th>
+                </tr>
+                <?php
+                    $clientId = $_SESSION['clientToken'];       //Data as array
+                    $deleteItem = $_POST['deleteItem'];
 
-                    $filterLokator = $_POST['filterLokator'];
-                    $query = mysqli_query($db, "SELECT lokatorzy.id, lokatorzy.imie, lokatorzy.nazwisko, ROUND(stanLicznika, 2) AS stanLicznika, dataOdczytu, id FROM dane JOIN lokatorzy ON  dane.idLokatora = lokatorzy.id WHERE idLokatora = $filterLokator ORDER BY concat(lokatorzy.id, lokatorzy.nazwisko) ASC, dataOdczytu ASC");
-        //                $resoult = mysqli_fetch_array($query);
+                    if($_POST['filterSubmit'] && (($_POST['filterLokator'] != "0")||($_POST['filterDate'] != "0"))){
 
-                    $idLokatora = 0;
-                    while($resoult = mysqli_fetch_array($query)){
+                        $filterLokator = $_POST['filterLokator'];
+                        $query = mysqli_query($db, "SELECT lokatorzy.id, lokatorzy.imie, lokatorzy.nazwisko, ROUND(stanLicznika, 2) AS stanLicznika, dataOdczytu, dane.id FROM dane JOIN lokatorzy ON  dane.idLokatora = lokatorzy.id WHERE idLokatora = $filterLokator ORDER BY concat(lokatorzy.id, lokatorzy.nazwisko) ASC, dataOdczytu ASC");
+            //                $resoult = mysqli_fetch_array($query);
 
-                        if ($idLokatora!=$resoult[0])
-                        {
-                            $lastValue = 0;
-                            $difference = 0;
-                            $idLokatora=$resoult[0];
+                        $idLokatora = 0;
+                        while($resoult = mysqli_fetch_array($query)){
+
+                            if ($idLokatora!=$resoult[0])
+                            {
+                                $lastValue = 0;
+                                $difference = 0;
+                                $idLokatora=$resoult[0];
+                            }
+                            if($lastValue > 0){
+                                $difference = $resoult['stanLicznika'] - $lastValue;
+                                $lastValue = $lastValue."m<sup>3</sup>";
+                            }else{
+                                $lastValue = "Brak Danych";
+                            }
+
+                            echo "<tr>
+                            <td>".$resoult['imie']." ".$resoult['nazwisko']."</td>
+                            <td id='lastValue'>".$lastValue."</td>
+                            <td id='newValue'>".$resoult['stanLicznika']."m<sup>3</sup></td>
+                            <td>".$resoult['dataOdczytu']."</td>
+                            <td>".number_format($difference, 2)."m<sup>3</sup></td>
+                            <td><input type='button' class='btnEdit' value='Edytuj'>  <button type='submit' class='btnDelete' name='deleteItem' value='".$resoult['id']."'>Usuń</button></td>
+                            </tr>";
+
+                            $lastValue = $resoult['stanLicznika'];
                         }
-                        if($lastValue > 0){
-                            $difference = $resoult['stanLicznika'] - $lastValue;
-                            $lastValue = $lastValue."m<sup>3</sup>";
-                        }else{
-                            $lastValue = "Brak Danych";
-                        }
-
-                        echo "<tr><td class='hide' id='change'>".$resoult['id']."</td>
-                        <td>".$resoult['imie']." ".$resoult['nazwisko']."</td>
-                        <td id='lastValue'>".$lastValue."</td>
-                        <td id='newValue'>".$resoult['stanLicznika']."m<sup>3</sup></td>
-                        <td>".$resoult['dataOdczytu']."</td>
-                        <td>".number_format($difference, 2)."m<sup>3</sup></td>
-                        <td><input type='button' class='btnEdit' value='Edytuj'>  <input type='button' class='btnDelete' value='Usuń'></td>
-                        </tr>";
-
-                        $lastValue = $resoult['stanLicznika'];
                     }
-                }
-                else{
-                    $query = mysqli_query($db, "SELECT lokatorzy.id, lokatorzy.imie, lokatorzy.nazwisko, ROUND(stanLicznika, 2) AS stanLicznika, dataOdczytu, id FROM dane JOIN lokatorzy ON  dane.idLokatora = lokatorzy.id ORDER BY concat(lokatorzy.id, lokatorzy.nazwisko) ASC, dataOdczytu ASC");
-        //                $resoult = mysqli_fetch_array($query);
+                    else{
+                        $query = mysqli_query($db, "SELECT lokatorzy.id, lokatorzy.imie, lokatorzy.nazwisko, ROUND(stanLicznika, 2) AS stanLicznika, dataOdczytu, dane.id FROM dane JOIN lokatorzy ON  dane.idLokatora = lokatorzy.id ORDER BY concat(lokatorzy.id, lokatorzy.nazwisko) ASC, dataOdczytu ASC");
+            //                $resoult = mysqli_fetch_array($query);
 
-                    $idLokatora = 0;
-                    while($resoult = mysqli_fetch_array($query)){
+                        $idLokatora = 0;
+                        while($resoult = mysqli_fetch_array($query)){
 
-                        if ($idLokatora!=$resoult[0])
-                        {
-                            $lastValue = 0;
-                            $difference = 0;
-                            $idLokatora=$resoult[0];
+                            if ($idLokatora!=$resoult[0])
+                            {
+                                $lastValue = 0;
+                                $difference = 0;
+                                $idLokatora=$resoult[0];
+                            }
+                            if($lastValue > 0){
+                                $difference = $resoult['stanLicznika'] - $lastValue;
+                                $lastValue = $lastValue."m<sup>3</sup>";
+                            }else{
+                                $lastValue = "Brak Danych";
+                            }
+
+                            echo "<tr><td class='hide' id='change'>".$resoult['id']."</td>
+                            <td>".$resoult['imie']." ".$resoult['nazwisko']."</td>
+                            <td id='lastValue'>".$lastValue."</td>
+                            <td id='newValue'>".$resoult['stanLicznika']."m<sup>3</sup></td>
+                            <td>".$resoult['dataOdczytu']."</td>
+                            <td>".number_format($difference, 2)."m<sup>3</sup></td>
+                            <td><input type='button' class='btnEdit' value='Edytuj'>  <button type='submit' class='btnDelete' name='deleteItem' value='".$resoult['id']."'>Usuń</button></td>
+                            </tr>";
+
+                            $lastValue = $resoult['stanLicznika'];
                         }
-                        if($lastValue > 0){
-                            $difference = $resoult['stanLicznika'] - $lastValue;
-                            $lastValue = $lastValue."m<sup>3</sup>";
-                        }else{
-                            $lastValue = "Brak Danych";
-                        }
-
-                        echo "<tr><td class='hide' id='change'>".$resoult['id']."</td>
-                        <td>".$resoult['imie']." ".$resoult['nazwisko']."</td>
-                        <td id='lastValue'>".$lastValue."</td>
-                        <td id='newValue'>".$resoult['stanLicznika']."m<sup>3</sup></td>
-                        <td>".$resoult['dataOdczytu']."</td>
-                        <td>".number_format($difference, 2)."m<sup>3</sup></td>
-                        <td><input type='button' class='btnEdit' value='Edytuj'>  <input type='button' name='delete' class='btnDelete' value='Usuń'></td>
-                        </tr>";
-
-                        $lastValue = $resoult['stanLicznika'];
                     }
-                }
-                mysqli_close($db);
-            ?>
-        </table>
+
+                    if($deleteItem){
+                        mysqli_query($db, "DELETE FROM dane WHERE dane.id = ".$deleteItem."");
+                        $_SESSION['i_action'] = "Pomyślnie usunięto wpis";
+                    }
+
+                    mysqli_close($db);
+                ?>
+            </table>
+        </form>
     </div>
 <!--
     <div class="main insert">
@@ -223,8 +239,4 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
     </div>
 -->
 </body>
-
-<script>
-
-</script>
 </html>
