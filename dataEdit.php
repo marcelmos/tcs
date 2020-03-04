@@ -54,7 +54,9 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
             <br>
             <input type="submit" name="editValue" class="btnEdit" value="Zapisz zmiany">   <input type="submit" name="deleteValue" class="btnDelete" value="Usuń wpis">
         </form>
-        <br><br>
+        <br>
+        <h4>Uwaga!<br> Usunięcie rekordu jest nieodwracalne!</h4>
+        <br>
         <a href="adminProfile.php"><button class="btnAction">Anuluj działań</button></a>
     </div>
 </body>
