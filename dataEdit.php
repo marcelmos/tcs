@@ -1,6 +1,6 @@
 <html>
 <?php
-//error_reporting(E_ALL ^ E_NOTICE);      //Hide notices ENABLE IF PUBLIC
+error_reporting(E_ALL ^ E_NOTICE);      //Hide notices ENABLE IF PUBLIC
 session_start();
 $typKonta[0] = $_SESSION['typKonta'];
 
