@@ -28,7 +28,7 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
         <a href="createUser.php"><input type="button" value="Kreator użytkownik"></a>
         <a href="accountManager.php"><input type="button" value="Menedżer kont"></a>
         <a href="generateReport.php"><input type="button" value="Kreator raportów"></a>
-        <a href="changelog.txt" target="_blank"><input type="button" value="[v1.4] Lista zmian"></a>
+        <a href="changelog.txt" target="_blank"><input type="button" value="[v1.5] Lista zmian"></a>
     </div>
 
     <div class="main-full">
@@ -134,10 +134,9 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
             }
         ?>
 
-        <form method="post">
+        <!-- <form action="dataEdit.php" method="post"> -->
             <table>
                 <tr>
-                    <td class="hide">ID</td>
                     <th>Imię i Nazwisko</th>
                     <th>Poprzedni Stan Licznika</th>
                     <th>Najnowszy Stan Licznika</th>
@@ -147,7 +146,6 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
                 </tr>
                 <?php
                     $clientId = $_SESSION['clientToken'];       //Data as array
-                    $deleteItem = $_POST['deleteItem'];
 
                     if($_POST['filterSubmit'] && (($_POST['filterLokator'] != "0")||($_POST['filterDate'] != "0"))){
 
@@ -171,14 +169,14 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
                                 $lastValue = "Brak Danych";
                             }
 
-                            echo "<tr>
+                            echo "<form action='dataEdit.php' method='post'><tr>
                             <td>".$resoult['imie']." ".$resoult['nazwisko']."</td>
                             <td id='lastValue'>".$lastValue."</td>
                             <td id='newValue'>".$resoult['stanLicznika']."m<sup>3</sup></td>
                             <td>".$resoult['dataOdczytu']."</td>
                             <td>".number_format($difference, 2)."m<sup>3</sup></td>
-                            <td><input type='button' class='btnEdit' value='Edytuj'>  <button type='submit' class='btnDelete' name='deleteItem' value='".$resoult['id']."'>Usuń</button></td>
-                            </tr>";
+                            <td><button type='submit' class='btnAction' name='btnAction' value='".$resoult['id']."'>Edytuj/Usuń</button></td>
+                            </tr></form>";
 
                             $lastValue = $resoult['stanLicznika'];
                         }
@@ -203,28 +201,32 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
                                 $lastValue = "Brak Danych";
                             }
 
-                            echo "<tr><td class='hide' id='change'>".$resoult['id']."</td>
+                            echo "<form action='dataEdit.php' method='post'><tr>
+                            <td class='hide' id='change'>".$resoult['id']."</td>
                             <td>".$resoult['imie']." ".$resoult['nazwisko']."</td>
                             <td id='lastValue'>".$lastValue."</td>
                             <td id='newValue'>".$resoult['stanLicznika']."m<sup>3</sup></td>
                             <td>".$resoult['dataOdczytu']."</td>
                             <td>".number_format($difference, 2)."m<sup>3</sup></td>
-                            <td><input type='button' class='btnEdit' value='Edytuj'>  <button type='submit' class='btnDelete' name='deleteItem' value='".$resoult['id']."'>Usuń</button></td>
-                            </tr>";
+                            <td><button type='submit' class='btnAction' name='btnAction' value='".$resoult['id']."'>Edytuj/Usuń</button></td>
+                            </tr></form>";
 
                             $lastValue = $resoult['stanLicznika'];
                         }
                     }
 
-                    if($deleteItem){
-                        mysqli_query($db, "DELETE FROM dane WHERE dane.id = ".$deleteItem."");
-                        $_SESSION['i_action'] = "Pomyślnie usunięto wpis";
-                    }
+                    // if($_POST['deleteItem']){
+                    //     $deleteItem = $_POST['deleteItem'];
+                    //     mysqli_query($db, "DELETE FROM dane WHERE id = $deleteItem");
+                    //     $_SESSION['i_action'] = "Pomyślnie usunięto wpis";
+                    //     header("Refresh:0");
+                    //     exit();
+                    // }
 
                     mysqli_close($db);
                 ?>
             </table>
-        </form>
+        <!-- </form> -->
     </div>
 <!--
     <div class="main insert">

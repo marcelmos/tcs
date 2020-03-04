@@ -31,10 +31,11 @@
 ######### v1.5 #########
 
 >Dodano:
-    -Przyciski akcji na rekordach [nie działa] (Usuwanie działa 'jakoś'...)
+    -Możliwość wykonywania akcji na rekordach z poziomu administratora.
+    -Możliwość edycji lub usunięcia rekordu z bazy danych.
 
 >Fix:
-    -Brak
+    -Poprawiono wyświetlanie elementów po zalogowaniu.
 
 >Zmieniono:
-    -Brak
+    -Sposób wyświetlania okna logowania został przystosowany do urządzeń mobilnych.
