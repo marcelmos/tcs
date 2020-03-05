@@ -27,8 +27,9 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
         <a href="profileEdit.php"><input type="button" value="Zmień login/hasło"></a>
         <a href="createUser.php"><input type="button" value="Kreator użytkownik"></a>
         <a href="accountManager.php"><input type="button" value="Menedżer kont"></a>
+        <a href="mainCounter.php"><input type="button" value="Główny licznik"></a>
         <a href="generateReport.php"><input type="button" value="Kreator raportów"></a>
-        <a href="changelog.txt" target="_blank"><input type="button" value="[v1.5] Lista zmian"></a>
+        <a href="changelog.txt" target="_blank"><input type="button" value="[v1.6] Lista zmian"></a>
     </div>
 
     <div class="main-full">
@@ -102,37 +103,40 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
             */
            ?>
         </table> -->
+        <h3>Historia odczytów</h3>
+        <div class="topMain">
 
-       <h3>Historia odczytów</h3>
+            <div class="filter">
+                <p>Filtruj dane według:
+                    <form method="post">
+                        Lokatorzy:
+                        <select name="filterLokator">
+                            <option value="0">Brak</option>
+                            <?php
+                            $query = mysqli_query($db, "SELECT id, imie, nazwisko FROM lokatorzy WHERE typKonta_id = 2");
+                            while($resoult = mysqli_fetch_array($query)){
+                                echo "<option value=".$resoult['id'].">".$resoult['imie']." ".$resoult['nazwisko']."</option>";
+                            }
+                            ?>
+                        </select>&nbsp;&nbsp;
+                        Data:
+                        <select name="filterDate">
+                            <option value="0">Brak</option>
+                            <option value=""></option>
+                            <option value=""></option>
+                        </select>
+                        <input type="submit" name="filterSubmit" value="Filtruj dane">
+                    </form>
+                </p>
+            </div>
 
-        <p>Filtruj dane według:
-            <form method="post">
-                Lokatorzy:
-                <select name="filterLokator">
-                    <option value="0">Brak</option>
-                    <?php
-                    $query = mysqli_query($db, "SELECT id, imie, nazwisko FROM lokatorzy WHERE typKonta_id = 2");
-                    while($resoult = mysqli_fetch_array($query)){
-                        echo "<option value=".$resoult['id'].">".$resoult['imie']." ".$resoult['nazwisko']."</option>";
-                    }
-                    ?>
-                </select>&nbsp;&nbsp;
-                Data:
-                <select name="filterDate">
-                    <option value="0">Brak</option>
-                    <option value=""></option>
-                    <option value=""></option>
-                </select>
-                <input type="submit" name="filterSubmit" value="Filtruj dane">
-            </form>
-        </p>
-
-        <?php
-            if(isset($_SESSION['i_action'])){
-                echo "<div class='correct' style='text-align: center;'>".$_SESSION['i_action']."</div>";
-                unset($_SESSION['i_action']);
-            }
-        ?>
+            <?php
+                if(isset($_SESSION['i_action'])){
+                    echo "<div class='correct' style='text-align: center;'>".$_SESSION['i_action']."</div>";
+                    unset($_SESSION['i_action']);
+                }
+            ?>
+        </div>
 
         <!-- <form action="dataEdit.php" method="post"> -->
             <table>

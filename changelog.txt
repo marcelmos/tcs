@@ -39,3 +39,19 @@
 
 >Zmieniono:
     -Sposób wyświetlania okna logowania został przystosowany do urządzeń mobilnych.
+
+######### v1.6 #########
+
+>Dodano:
+    -Edycja daty odczytu po stronie administratora.
+    -Wprowadzanie stanu licznika głównego po stronie administratora.
+    -Możliwość odczytu stanu głównego licznika u wszystkich użytkowników.
+
+>Fix:
+    -Poprawiono wyświetlanie okna logowania na urządzeniach mobilnych.
+
+>Zmieniono:
+    -Uwaga! Została utworzona nowa tabela "glowny_licznik" o następujących parametrach:
+        >id (int, Ai, Primary)
+        >stanLicznika(float)
+        >dataOdczytu(date)

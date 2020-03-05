@@ -21,6 +21,7 @@ if($typKonta[0] != "1"){
         <a href="adminProfile.php"><input type="button" value="Wróć do Panelu Głównego"></a>
         <a href="profileEdit.php"><input type="button" value="Zmień login/hasło"></a>
         <a href="accountManager.php"><input type="button" value="Menedżer kont"></a>
+        <a href="mainCounter.php"><input type="button" value="Główny licznik"></a>
         <a href="createUser.php"><input type="button" value="Kreator użytkownik"></a>
     </div>
 

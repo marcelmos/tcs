@@ -27,6 +27,7 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
         <a href="adminProfile.php"><input type="button" value="Wróć do Panelu Głównego"></a>
         <a href="profileEdit.php"><input type="button" value="Zmień login/hasło"></a>
         <a href="accountManager.php"><input type="button" value="Menedżer kont"></a>
+        <a href="mainCounter.php"><input type="button" value="Główny licznik"></a>
         <a href="generateReport.php"><input type="button" value="Kreator raportów"></a>
     </div>
 

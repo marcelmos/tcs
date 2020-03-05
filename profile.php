@@ -31,6 +31,7 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
         </h2>
         <a href="profileEdit.php"><input type="button" value="Zmień login/hasło"></a>
         <a href="czynsze.php"><input type="button" value="Czynsze" disabled></a>
+        <a href="mainCounter.php"><input type="button" value="Główny licznik"></a>
     </div>
 
 <!---Send new data to DB--->

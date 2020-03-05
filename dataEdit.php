@@ -51,6 +51,8 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
             Nowa wartość stanu licznika:<br>
             <input type="number" step="0.01" name="newValue" placeholder="1234,56">m<sup>3</sup><br>
             <input type="hidden" name="recordId" value=<?php echo $recordId;?>>
+            Edytuj date: <br>
+            <input type="date" name="newDate"><br>
             <br>
             <input type="submit" name="editValue" class="btnEdit" value="Zapisz zmiany">   <input type="submit" name="deleteValue" class="btnDelete" value="Usuń wpis">
         </form>
@@ -72,9 +74,23 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
     if($_POST['editValue']){
         $recordId = $_POST['recordId'];
         $newValue = $_POST['newValue'];
-        $queryStat = mysqli_query($db, "UPDATE dane SET stanLicznika = '$newValue' WHERE dane.id = $recordId");
-        $_SESSION['i_action'] = "Pomyślnie zedytowano wpis";
-        header("Location: adminProfile.php");
+        $newDate = $_POST['newDate'];
+
+        if($_POST['newValue']){
+            $queryStat = mysqli_query($db, "UPDATE dane SET stanLicznika = '$newValue' WHERE dane.id = $recordId");
+            $_SESSION['i_action'] = "Pomyślnie zedytowano wartość licznika";
+            header("Location: adminProfile.php");
+        }
+        if($_POST['newDate']){
+            $queryStat = mysqli_query($db, "UPDATE dane SET dataOdczytu = '$newDate' WHERE dane.id = $recordId");
+            $_SESSION['i_action'] = "Pomyślnie zedytowano date wpisu";
+            header("Location: adminProfile.php");
+        }
+        if($_POST['newValue'] && $_POST['newDate']){
+            $queryStat = mysqli_query($db, "UPDATE dane SET stanLicznika = '$newValue', dataOdczytu = '$newDate' WHERE dane.id = $recordId");
+            $_SESSION['i_action'] = "Pomyślnie zedytowano date oraz stan licznika wpisu";
+            header("Location: adminProfile.php");
+        }
     }
 
     mysqli_close($db);
