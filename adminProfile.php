@@ -29,7 +29,7 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
         <a href="accountManager.php"><input type="button" value="Menedżer kont"></a>
         <a href="mainCounter.php"><input type="button" value="Główny licznik"></a>
         <a href="generateReport.php"><input type="button" value="Kreator raportów"></a>
-        <a href="changelog.txt" target="_blank"><input type="button" value="[v1.6] Lista zmian"></a>
+        <a href="changelog.txt" target="_blank"><input type="button" value="[v1.6a] Lista zmian"></a>
     </div>
 
     <div class="main-full">

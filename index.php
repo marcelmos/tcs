@@ -29,7 +29,7 @@ if((isSet($_SESSION['clientToken']))&&($_SESSION['typKonta']=="2")){
                 <input type="text" name="login"><br>
                 <p>Hasło:</p>
                 <input type="password" name="password"><br>
-                <br><br><br>
+                <br>
                 <input type="submit" value="Zaloguj się">
             </form>
         </div>

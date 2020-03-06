@@ -53,7 +53,6 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
             <small>*Pola wymagane</small>
             </form>
             </div>
-
             <div class='edit'>
             <form method='post'>
             <h3>Edytuj odczyt głównego licznika</h3><br>
@@ -89,7 +88,7 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
     <div class="main">
         <table>
             <tr>
-                <th>ID</th>
+                <?php if($typKonta[0] == "1") echo "<th>ID</th>"; ?>
                 <th>Poprzedni Stan Licznika</th>
                 <th>Najnowszy Stan Licznika</th>
                 <th>Data Najnowszego Odczytu<br><small>Format daty rok-miesiąc-dzień</small></th>
@@ -109,12 +108,20 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
                         $lastValue = "Brak Danych";
                     }
 
-                    echo "<tr>
-                    <td>".$resoult['id']."</td>
-                    <td>".$lastValue."</td>
-                    <td>".$resoult['stanLicznika']."m<sup>3</sup></td>
-                    <td>".$resoult['dataOdczytu']."</td>
-                    <td>".number_format($difference, 2)."m<sup>3</sup></td></tr>";
+                    if($typKonta[0] == "1"){
+                        echo "<tr>
+                        <td>".$resoult['id']."</td>
+                        <td>".$lastValue."</td>
+                        <td>".$resoult['stanLicznika']."m<sup>3</sup></td>
+                        <td>".$resoult['dataOdczytu']."</td>
+                        <td>".number_format($difference, 2)."m<sup>3</sup></td></tr>";
+                    }else{
+                        echo "<tr>
+                        <td>".$lastValue."</td>
+                        <td>".$resoult['stanLicznika']."m<sup>3</sup></td>
+                        <td>".$resoult['dataOdczytu']."</td>
+                        <td>".number_format($difference, 2)."m<sup>3</sup></td></tr>";
+                    }
 
                     $lastValue = $resoult['stanLicznika'];
                 }
