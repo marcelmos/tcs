@@ -63,3 +63,9 @@
 
 >Fix:
     -Usunięto pokazywaną się kolumne ID z kont lokatorów w zakładce "Główny licznik".
+
+######### v1.6b #########
+
+>Dodano:
+    -Wstawianie przez administratowra nowych odczytów w imieniu lokatorów
+

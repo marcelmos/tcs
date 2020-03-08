@@ -4,7 +4,7 @@ error_reporting(E_ALL ^ E_NOTICE);      //Hide notices ENABLE IF PUBLIC
 session_start();
 $typKonta[0] = $_SESSION['typKonta'];
 
-    if($typKonta[0] != "1"){
+if($typKonta[0] != "1"){
     header("Location: logout.php");     //Check if client token is is admin
 }
 
@@ -29,7 +29,7 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
         <a href="accountManager.php"><input type="button" value="Menedżer kont"></a>
         <a href="mainCounter.php"><input type="button" value="Główny licznik"></a>
         <a href="generateReport.php"><input type="button" value="Kreator raportów"></a>
-        <a href="changelog.txt" target="_blank"><input type="button" value="[v1.6a] Lista zmian"></a>
+        <a href="changelog.txt" target="_blank"><input type="button" value="[v1.6b] Lista zmian"></a>
     </div>
 
     <div class="main-full">
@@ -104,7 +104,7 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
            ?>
         </table> -->
         <h3>Historia odczytów</h3>
-        <div class="topMain">
+        <div class="topMain" style='display: flex; justify-content: space-between'>
 
             <div class="filter">
                 <p>Filtruj dane według:
@@ -135,7 +135,41 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
                     echo "<div class='correct' style='text-align: center;'>".$_SESSION['i_action']."</div>";
                     unset($_SESSION['i_action']);
                 }
+                if(isset($_SESSION['e_insert'])){
+                    echo "<div class='error' style='text-align: center;'>".$_SESSION['e_insert']."</div>";
+                    unset($_SESSION['e_insert']);
+                }
             ?>
+
+            <div>
+                <h3>Wstaw nowy wpis</h3>
+                <form action="sendDataAdmin.php" method="post" style='display: flex; justify-content: space-between'>
+                    <label>
+                        Lokator:<br>
+                        <select name="lokatorInsert">
+                            <option value="0">Brak</option>
+                            <?php
+                                $query = mysqli_query($db, "SELECT id, imie, nazwisko FROM lokatorzy WHERE typKonta_id = 2");
+                                while($resoult = mysqli_fetch_array($query)){
+                                    echo "<option value=".$resoult['id'].">".$resoult['imie']." ".$resoult['nazwisko']."</option>";
+                                }
+                            ?>
+                        </select>
+                    </label>&nbsp;&nbsp;
+
+                    <label>
+                        Stan licznika:<br>
+                        <input type="number" step="0.01" name="licznikInsert" placeholder="1234,56">m<sup>3</sup>
+                    </label>&nbsp;&nbsp;
+
+                    <label>
+                        Data odczytu:<br>
+                        <input type="date" name="dateInsert">
+                    </label>&nbsp;&nbsp;
+                    <br>
+                    <input type="submit" name="insertNewData" value="Wstaw odczyt">
+                </form>
+            </div>
         </div>
 
         <!-- <form action="dataEdit.php" method="post"> -->
@@ -226,8 +260,6 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
                     //     header("Refresh:0");
                     //     exit();
                     // }
-
-                    mysqli_close($db);
                 ?>
             </table>
         <!-- </form> -->
@@ -245,4 +277,25 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
     </div>
 -->
 </body>
+<?php
+    if($_POST['insertNewData']){
+        $licznikInsert = $_POST['licznikInsert'];
+        $dateInsert = $_POST['dateInsert'];
+        $lokatorInsert = $_POST['lokatorInsert'];
+
+        if(($lokatorInsert>0)&&$licznikInsert&&$dateInsert){
+            mysqli_query($db, "INSERT INTO dane (idLokatora, stanLicznika, dataOdczytu) VALUES ($lokatorInsert, ROUND($licznikInsert, 2), '$dateInsert')");
+            $_SESSION['i_action'] = "Pomyślnie dodano wpis.";
+            header("Location: adminProfile.php");
+        }else{
+            $_SESSION['e_insert'] = "Niepowodzenie!<br>Należy wypełnić wszystkie pola.";
+            header("Location: adminProfile.php");
+        }
+    }
+    //Poprawić kod
+    //
+    //Działanie:
+    //Wprowadzanie wartości w przez administratora w imieniu innego urzytkownika
+    mysqli_close($db);
+?>
 </html>
