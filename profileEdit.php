@@ -37,7 +37,7 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
         <?php
         if($typKonta[0] != "1"){
             echo "<a href='profile.php'><input type='button' value='Wróć'></a> ";
-            echo "<a href='czynsze.php'><input type='button' value='Czynsze' disabled></a> ";
+            echo "<a href='czynsze.php'><input type='button' value='Czynsze'></a> ";
             echo "<a href='mainCounter.php'><input type='button' value='Główny licznik'></a> ";
         }else if($typKonta[0] == "1"){
             echo "<a href='adminProfile.php'><input type='button' value='Wróć do Panelu Głównego'></a> ";
@@ -45,6 +45,7 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
             echo "<a href='accountManager.php'><input type='button' value='Menedżer kont'></a> ";
             echo "<a href='mainCounter.php'><input type='button' value='Główny licznik'></a> ";
             echo "<a href='generateReport.php'><input type='button' value='Kreator raportów'></a> ";
+            echo "<a href='sendFile.php'><input type='button' value='Prześlij czynsz'></a>";
         }
         ?>
     </div>

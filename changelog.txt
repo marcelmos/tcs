@@ -69,3 +69,11 @@
 >Dodano:
     -Wstawianie przez administratowra nowych odczytów w imieniu lokatorów
 
+######### v1.7 #########
+
+>Dodano:
+    -Wysyłanie przez administratora indywidualnych plików konkretnemu użytkownikowi.
+    -Karta "czynsze" z poziomu lokatora została aktywowana.
+
+>Fix:
+    -Zablokowano możliwość przeglądania plików strony z poziomu eksploratora plików przeglądarki.
