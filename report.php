@@ -38,7 +38,7 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
         //$lastValue = 0;
         $sumValue = 0;
 
-        $query = mysqli_query($db, "SELECT lokatorzy.imie, lokatorzy.nazwisko, idLokatora, ROUND(stanLicznika, 2) AS stanLicznika, dataOdczytu FROM dane JOIN lokatorzy ON dane.idLokatora = lokatorzy.id WHERE  MONTH(dataOdczytu) = '$month'  and YEAR(dataOdczytu) = '$year' ORDER BY dataOdczytu ASC");
+        $query = mysqli_query($db, "SELECT lokatorzy.imie, lokatorzy.nazwisko, idLokatora, ROUND(stanLicznika, 2) AS stanLicznika, dataOdczytu FROM dane JOIN lokatorzy ON dane.idLokatora = lokatorzy.id WHERE  MONTH(dataOdczytu) = '$month'  and YEAR(dataOdczytu) = '$year' ORDER BY idLokatora ASC");
 
 //        $resoult = mysqli_fetch_array($query);
 
@@ -86,6 +86,9 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
             $sumValue += $difference;
         }
         echo "<tr><td colspan='3'></td> <th>Suma: </th> <td>".number_format($sumValue, 2)."m<sup>3</sup></td></tr>";
+        $mainCounter = mysqli_query($db, "SELECT stanLicznika FROM glowny_licznik WHERE MONTH(dataOdczytu) = '$month'  and YEAR(dataOdczytu) = '$year'");
+        $counterStr = mysqli_fetch_array($mainCounter);
+        echo "<tr><td colspan='3'></td> <th>Główny licznik: </th> <td>".$counterStr[0]."m<sup>3</sup></td></tr>";
         mysqli_close($db);
         ?>
 

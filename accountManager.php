@@ -68,7 +68,7 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
             </tr>
             <?php
 
-            $queryDatas = mysqli_query($db, "SELECT id, imie, nazwisko, login FROM lokatorzy WHERE typKonta_id <> 1 ");
+            $queryDatas = mysqli_query($db, "SELECT id, imie, nazwisko, login FROM lokatorzy WHERE typKonta_id <> 1 GROUP BY id ASC");
             while($resoult = mysqli_fetch_array($queryDatas)){
                 echo "<tr>
                     <td>".$resoult['id']."</td>
