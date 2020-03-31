@@ -39,7 +39,7 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
         <form action="sendData.php" method="post">
             <h3>Wprowadź nowy odczyt</h3>
             Stan licznika:<br>
-            <input type="number" step="0.01" name="licznik" placeholder="1234,56">m<sup>3</sup>&nbsp;&nbsp;&nbsp;&nbsp;
+            <input type="number" step="0.01" name="licznik" placeholder="1234.56">m<sup>3</sup>&nbsp;&nbsp;&nbsp;&nbsp;
             <!-- Data odczytu:<br>
             <input type="date" name="data"><br> -->
             <input type="submit" value="Wyślij"><br><br>

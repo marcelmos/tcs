@@ -78,7 +78,7 @@
 >Fix:
     -Zablokowano możliwość przeglądania plików strony z poziomu eksploratora plików przeglądarki.
 
-######### v1.7 #########
+######### v1.7a #########
 
 >Dodano:
     -Sortowanie rosnąco lokatorów po ID lokatora w wygenerowanym raporcie.
@@ -86,3 +86,9 @@
 
 >Fix:
     -Zablokowano możliwość przeglądania plików strony z poziomu eksploratora plików przeglądarki.
+
+######### v1.7b #########
+
+>Fix:
+    -Poprawiono podpowiedź poprawnego wpisu stanu licznika.
+    -Poprawiono wyświetlanie stanu głównego licznika w raporcie do dwuch miejsc po przecinku.

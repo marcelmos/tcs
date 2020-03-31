@@ -49,7 +49,7 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
 
         <form action="dataEdit.php" method="post">
             Nowa wartość stanu licznika:<br>
-            <input type="number" step="0.01" name="newValue" placeholder="1234,56">m<sup>3</sup><br>
+            <input type="number" step="0.01" name="newValue" placeholder="1234.56">m<sup>3</sup><br>
             <input type="hidden" name="recordId" value=<?php echo $recordId;?>>
             Edytuj date: <br>
             <input type="date" name="newDate"><br>

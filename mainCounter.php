@@ -45,7 +45,7 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
             <form method='post'>
             <h3>Wprowadź odczyt głównego licznika</h3><br>
             Stan licznika*:<br>
-            <input type='number' step='0.01' name='licznikGlowny' placeholder='1234,56'>m<sup>3</sup><br>
+            <input type='number' step='0.01' name='licznikGlowny' placeholder='1234.56'>m<sup>3</sup><br>
             Data odczytu*:<br>
             <input type='date' name='data'><br>
             <br>
@@ -63,7 +63,7 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
             </label>
             <label>
             Stan licznika:<br>
-            <input type='number' step='0.01' name='newLicznikGlowny' placeholder='1234,56'>m<sup>3</sup><br>
+            <input type='number' step='0.01' name='newLicznikGlowny' placeholder='1234.56'>m<sup>3</sup><br>
             </label>
             <label>
             Data odczytu:<br>
