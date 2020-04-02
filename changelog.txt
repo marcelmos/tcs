@@ -95,6 +95,8 @@
 
 ######### v1.7c #########
 
+>Dodano:
+    -W panelu użytkownika dodano pod polem wprowadzania danych adnotację o wprowadzaniu kropki
 >Zmieniono:
     [Raport]
         -Główny licznik wyświetlany jest jak lokatorzy.

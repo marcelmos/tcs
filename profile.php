@@ -42,7 +42,9 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
             <input type="number" step="0.01" name="licznik" placeholder="1234.56">m<sup>3</sup>&nbsp;&nbsp;&nbsp;&nbsp;
             <!-- Data odczytu:<br>
             <input type="date" name="data"><br> -->
-            <input type="submit" value="Wyślij"><br><br>
+            <input type="submit" value="Wyślij"><br>
+            <small>*Części dziesiętne należy odzielać kropką.</small><br>
+            <br>
             <small>*W przypadku błędnego wprowadzenia danych<br>&nbsp;należy skontatktować się z administratorem.</small>
             <?php
                 // if(isset($_SESSION["err_valInput"])){
