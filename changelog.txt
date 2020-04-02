@@ -92,3 +92,11 @@
 >Fix:
     -Poprawiono podpowiedź poprawnego wpisu stanu licznika.
     -Poprawiono wyświetlanie stanu głównego licznika w raporcie do dwuch miejsc po przecinku.
+
+######### v1.7c #########
+
+>Zmieniono:
+    [Raport]
+        -Główny licznik wyświetlany jest jak lokatorzy.
+        -Stare pole głównego licznika pokazuje różnice głównego licznika od sumy różnicy lokatorów.
+        -Nazwa "Suma:" w raporcie została zmieniona na "Suma różnicy z lokatorów:".
