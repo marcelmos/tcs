@@ -66,20 +66,36 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
 
         if(($lokator>0)&&(!empty($_FILES['uploadedFile']))){
 
+            //Random string generator
+            $random_string_length = 5;
+            $characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
+            $string = '';
+            $max = strlen($characters) - 1;
+            for ($i = 0; $i < $random_string_length; $i++) {
+                $string .= $characters[mt_rand(0, $max)];
+            }
+            $addString = "-".$string.".pdf";  //Ready string
+
+            $fileName = str_replace(' ', '-', $fileName);   //Remove space
+            $newFileName = substr($fileName, 0, -4);    //Remove ".pdf" from string
+
             if(file_exists("czynsze")){
 
                 if(file_exists("czynsze/$hashedLokator")){
                     move_uploaded_file($fileTmp, "czynsze/$hashedLokator/$fileName");
+                    rename("czynsze/$hashedLokator/$fileName", "czynsze/$hashedLokator/".$newFileName.$addString);
                     echo "Pomyślnie przesłano plik $fileName.";
                 }else{
                     mkdir("czynsze/$hashedLokator");
                     move_uploaded_file($fileTmp, "czynsze/$hashedLokator/$fileName");
+                    rename("czynsze/$hashedLokator/$fileName", "czynsze/$hashedLokator/".$newFileName.$addString);
                     echo "Utworzono folder dla lokatora o ID $lokator, oraz plik $fileName został zainportowany.";
                 }
             }else{
                 mkdir("czynsze");
                 mkdir("czynsze/$hashedLokator");
                 move_uploaded_file($fileTmp, "czynsze/$hashedLokator/$fileName");
+                rename("czynsze/$hashedLokator/$fileName", "czynsze/$hashedLokator/".$newFileName.$addString);
                 echo "Utworzono folder 'czynsze', katalog lokatora o ID $lokator, oraz plik $fileName został zainportowany.";
             }
         }else{

@@ -43,7 +43,7 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
             <!-- Data odczytu:<br>
             <input type="date" name="data"><br> -->
             <input type="submit" value="Wyślij"><br>
-            <small>*Części dziesiętne należy odzielać kropką.</small><br>
+            <small>*Części dziesiętne należy oddzielać kropką.</small><br>
             <br>
             <small>*W przypadku błędnego wprowadzenia danych<br>&nbsp;należy skontatktować się z administratorem.</small>
             <?php

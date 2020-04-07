@@ -96,9 +96,14 @@
 ######### v1.7c #########
 
 >Dodano:
-    -W panelu użytkownika dodano pod polem wprowadzania danych adnotację o wprowadzaniu kropki
+    -W panelu użytkownika dodano pod polem wprowadzania danych adnotację o wprowadzaniu kropko do oddzielania części dziesiętnych
 >Zmieniono:
     [Raport]
         -Główny licznik wyświetlany jest jak lokatorzy.
         -Stare pole głównego licznika pokazuje różnice głównego licznika od sumy różnicy lokatorów.
         -Nazwa "Suma:" w raporcie została zmieniona na "Suma różnicy z lokatorów:".
+
+######### v1.7d #########
+
+>Zmieniono:
+    -Do nazwy plików PDF dopisywany jest ciąg złożony z pięciu znaków alfanumerycznych.
