@@ -1,8 +1,8 @@
 <?php
 
 $host = "localhost";
-$db = "lokatorzynew";
-$user = "root";
-$password = "";
+$db = "lokatorzy_db";
+$db_user = "root";
+$db_pass = "";
 
 ?>

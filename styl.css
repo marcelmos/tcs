@@ -1,3 +1,8 @@
+*{
+    margin: 0;
+    box-sizing: border-box;
+}
+
 body{
     font-family: Verdana;
     background-color: #474747;
@@ -12,7 +17,27 @@ input, select{
     padding: 5px;
 }
 
-button{
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance:textfield;
+}
+
+option:nth-child(2n){
+    background-color: #9fc8dd;
+}
+
+option:nth-child(2n+1) {
+	background-color: #8db3c6;
+}
+
+.logout{
     background-color: #a51b1b;
     border: none;
     color: #fff;
@@ -54,11 +79,11 @@ th{
 }
 
 tr{
-    text-align: right; 
+    text-align: right;
 }
 
 tr:nth-child(2n){
-    background-color: #77badd; 
+    background-color: #77badd;
 }
 
 tr:nth-child(2n+1) {
@@ -68,11 +93,35 @@ tr:nth-child(2n+1) {
 .login-window{
     background-color: #303030;
     height: auto;
-    width: 200;
+    width: 250;
     padding: 2%;
     margin-left: auto;
     margin-right: auto;
+    margin-top: 50px;
 }
+
+@media only screen and (max-device-width: 768px){
+    .login-window {
+        background-color: #303030;
+        height: 100%;
+        width: 100%;
+        margin-top: 0;
+        display: inline-block;
+        text-align: center;
+        padding-top: 50%;
+        padding-bottom: 50%;
+        zoom: 1;
+    }
+
+    .login-window form p, .login-window p+h2+h4{
+        font-size: 350%;
+    }
+
+    .login-window form input, .login-window p+h2+h4{
+        width: 100%;
+        font-size: 400%;
+    }
+  }
 
 .top{
     background-color: #303030;
@@ -83,7 +132,7 @@ tr:nth-child(2n+1) {
 
 .main{
     background-color: #757575;
-    width: 48%;
+    width: 100%;
     height: auto;
     float: left;
     padding: 1%;
@@ -93,7 +142,12 @@ tr:nth-child(2n+1) {
     background-color: #757575;
     width: 100%;
     height: auto;
-    padding: 10px;
+    padding: 1%;
+}
+
+.topMain{
+    display: flex;
+    justify-content: space-between;
 }
 
 .insert{
@@ -110,4 +164,43 @@ tr:nth-child(2n+1) {
     color: #fff;
     padding: 20px;
     float: right;
+}
+
+.btnDelete{
+    background: #a01f1f;
+    color: #fff;
+    padding: 5px;
+    font-weight: bold;
+    font-size: 16px;
+    border: none;
+}
+
+.btnEdit{
+    background: #326132;
+    color: #fff;
+    padding: 5px;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.btnAction{
+    background: #0077ff;
+    color: #fff;
+    padding: 8px;
+    font-weight: bold;
+    font-size: 16px;
+    border: none;
+    border-radius: 10px;
+}
+
+.error{
+    color: #b90c0c;
+}
+
+.info{
+    color: #0fa2f0;
+}
+
+.correct{
+    color: #00e000;
 }

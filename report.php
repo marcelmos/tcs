@@ -2,15 +2,15 @@
 <?php
 session_start();
 $typKonta = $_SESSION['typKonta'];
-    
+
 if($typKonta[0] != "1"){
     header("Location: logout.php");
 }
-        
+
 //Connect to DB
 require_once('db_ini.php');
-$db = mysqli_connect($host, $user, $password, $db);
-    
+$db = mysqli_connect($host, $db_user, $db_pass, $db);
+
 ?>
 <table border="5">
     <tr>
@@ -29,37 +29,32 @@ $db = mysqli_connect($host, $user, $password, $db);
         <th>Różnica</th>
     </tr>
     <tr>
-        
+
         <?php
-        
+
         $year = $_POST['year'];
         $month = $_POST['month'];
         $difference = 0;
-        //$lastValue = 0;
+        $differenceCounter = 0;
         $sumValue = 0;
-        $x = 0;
-        
-        $query = mysqli_query($db, "SELECT lokatorzy.imie, lokatorzy.nazwisko, idLokatora, stanLicznika, dataOdczytu FROM dane JOIN lokatorzy ON dane.idLokatora = lokatorzy.id WHERE dataOdczytu >= '$year-$month-01' AND dataOdczytu <= '$year-$month-31' ORDER BY dataOdczytu ASC");
-        
-//        $resoult = mysqli_fetch_array($query);
+
+        $query = mysqli_query($db, "SELECT lokatorzy.imie, lokatorzy.nazwisko, idLokatora, ROUND(stanLicznika, 2) AS stanLicznika, dataOdczytu FROM dane JOIN lokatorzy ON dane.idLokatora = lokatorzy.id WHERE  MONTH(dataOdczytu) = '$month'  and YEAR(dataOdczytu) = '$year' ORDER BY idLokatora ASC");
 
         while($resoult = mysqli_fetch_array($query)){
-            $x++; //Auto incrementation
-//            $lastValue = array(0); //Setting var
-            
-            if($month = "01"){
-                $prevYearMonth = (($year-1)."-12");
-//                $year -= 1;
-            }else{
-                $prevYearMonth = (($year-1)."-".($month-1));
+
+            if($month == "01"){
+                $prevMonth = 12;
+                $prevYear = ($year-1);
             }
-            
-            $queryLast = mysqli_query($db, "SELECT stanLicznika FROM dane WHERE idLokatora = ".$resoult['idLokatora']." AND (dataOdczytu BETWEEN '$prevYearMonth-01' AND '$prevYearMonth-31') GROUP BY dataOdczytu ASC");
-            
-//            $queryLast = mysqli_query($db, "SELECT stanLicznika FROM dane JOIN lokatorzy ON  dane.idLokatora = lokatorzy.id WHERE lokatorzy.id = ".$resoult['id']." AND (dataOdczytu >= '$prevYearMonth-01' AND dataOdczytu <= '$prevYearMonth-31') GROUP BY dataOdczytu DESC");
-            
+            if($month != "01"){
+                $prevMonth = ($month-1);
+                $prevYear = $year;
+            }
+
+            $queryLast = mysqli_query($db, "SELECT ROUND(stanLicznika, 2) AS stanLicznika FROM dane WHERE idLokatora = '".$resoult['idLokatora']."' AND MONTH(dataOdczytu) = '$prevMonth' and YEAR(dataOdczytu) = '$prevYear' GROUP BY dataOdczytu ASC");
+
             $lastValue = mysqli_fetch_array($queryLast);
-            
+
             if($lastValue > 0){
                 $lastValueInt = $lastValue[0];
                 $lastValueShow = $lastValueInt."m<sup>3</sup>";
@@ -70,25 +65,59 @@ $db = mysqli_connect($host, $user, $password, $db);
                 $lastValueInt = 0;
             }
 
-//            echo "<tr><td>".$resoult['imie']." ".$resoult['nazwisko']."</td> 
-//                <td>".$lastValue['stanLicznika']."</td>
-//                <td>".$resoult['stanLicznika']."m<sup>3</sup></td>
-//                <td>".$resoult['dataOdczytu']."</td>
-//                <td>".($resoult['stanLicznika'] - $lastValue['stanLicznika'])."m<sup>3</sup></td></tr>";
-
-            echo "<tr><td>".$resoult['imie']." ".$resoult['nazwisko']."</td> 
+            echo "<tr><td>".$resoult['imie']." ".$resoult['nazwisko']."</td>
                 <td>".$lastValueShow."</td>
                 <td>".$resoult['stanLicznika']."m<sup>3</sup></td>
                 <td>".$resoult['dataOdczytu']."</td>
-                <td>".$difference."m<sup>3</sup></td></tr>";
+                <td>".number_format($difference, 2)."m<sup>3</sup></td></tr>";
 
-            $sumValue = ($resoult['stanLicznika']-$lastValueInt);
+            $sumValue += $difference;
         }
-        echo "<tr><td colspan='3'></td> <th>Średnia: </th> <td>".($sumValue/$x)."m<sup>3</sup></td></tr>";
+
+
+
+        //Main counter row
+        $queryMainCounter = mysqli_query($db, "SELECT ROUND(stanLicznika, 2) AS stanLicznika, dataOdczytu FROM glowny_licznik WHERE MONTH(dataOdczytu) = '$month'  and YEAR(dataOdczytu) = '$year'");
+
+        while($counterStr = mysqli_fetch_array($queryMainCounter)){
+
+            if($month == "01"){
+                $prevMonth = 12;
+                $prevYear = ($year-1);
+            }
+            if($month != "01"){
+                $prevMonth = ($month-1);
+                $prevYear = $year;
+            }
+
+            $queryMainCounterLast = mysqli_query($db, "SELECT ROUND(stanLicznika, 2) AS stanLicznika, dataOdczytu FROM glowny_licznik WHERE MONTH(dataOdczytu) = '$prevMonth'  and YEAR(dataOdczytu) = '$prevYear'");
+
+
+            $lastValue = mysqli_fetch_array($queryMainCounterLast);
+
+            if($lastValue > 0){
+                $lastValueInt = $lastValue[0];
+                $lastValueShow = $lastValueInt."m<sup>3</sup>";
+                $differenceCounter = ($counterStr['stanLicznika'] - $lastValue[0]);
+            }else{
+                $lastValueShow = "Brak Danych";
+                $differenceCounter = 0;
+                $lastValueInt = 0;
+            }
+
+            echo "<tr><th>Główny licznik</th>
+            <td>".$lastValueShow."</td>
+            <td>".$counterStr['stanLicznika']."m<sup>3</sup></td>
+            <td>".$counterStr['dataOdczytu']."</td>
+            <td>".number_format($differenceCounter, 2)."m<sup>3</sup></td></tr>";
+        }
+        echo "<tr><td colspan='3'></td> <th>Suma różnicy z lokatorów: </th> <td>".number_format($sumValue, 2)."m<sup>3</sup></td></tr>";
+
+        $glownyOdLokatorow = $differenceCounter - $sumValue;
+        echo "<tr><td colspan='2'></td> <th colspan='2'>Różnica głównego licznika od sumy różnicy lokatorów: </th> <td>".number_format($glownyOdLokatorow, 2)."m<sup>3</sup></td></tr>";
         mysqli_close($db);
         ?>
-        
+
     </tr>
 </table>
-
 </html>

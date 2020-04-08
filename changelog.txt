@@ -1,0 +1,117 @@
+######### v1.3b #########
+
+>Dodano:
+    -Przycisk z aktualną wersją programu, wraz z listą zmian.
+
+>Fix:
+    -Brak
+
+>Zmieniono:
+    -Wyświetlanie wartości do dwóch miejsc po przecinku (1.5 -> 1.50)
+    -Wyliczanie sumy z różnicy w wygenerowanym raporcie
+
+>Inne:
+    -Ukryto tabele z najnowszymi wartościami względem aktualnego miesiąca.
+
+######### v1.4 #########
+
+>Dodano:
+    -Filtrowanie danych po lokatorach na koncie administratora.
+    -Szablon wprowadzania nowych danych na koncie lokator.
+
+>Fix:
+    -Brak
+
+>Zmieniono:
+    -Wygląd tabeli z historią danych.
+
+>Inne:
+    -Ukryto sortowanie po stronie lokatora.
+
+######### v1.5 #########
+
+>Dodano:
+    -Możliwość wykonywania akcji na rekordach z poziomu administratora.
+    -Możliwość edycji lub usunięcia rekordu z bazy danych.
+
+>Fix:
+    -Poprawiono wyświetlanie elementów po zalogowaniu.
+
+>Zmieniono:
+    -Sposób wyświetlania okna logowania został przystosowany do urządzeń mobilnych.
+
+######### v1.6 #########
+
+>Dodano:
+    -Edycja daty odczytu po stronie administratora.
+    -Wprowadzanie stanu licznika głównego po stronie administratora.
+    -Możliwość odczytu stanu głównego licznika u wszystkich użytkowników.
+
+>Fix:
+    -Poprawiono wyświetlanie okna logowania na urządzeniach mobilnych.
+
+>Zmieniono:
+    -Uwaga! Została utworzona nowa tabela "glowny_licznik" o następujących parametrach:
+        >id (int, Ai, Primary)
+        >stanLicznika(float)
+        >dataOdczytu(date)
+
+######### v1.6a #########
+
+>Dodano:
+    -Przyspisy informujące. (Błędne logowanie, wprowadzanie danych)
+
+>Fix:
+    -Usunięto pokazywaną się kolumne ID z kont lokatorów w zakładce "Główny licznik".
+
+######### v1.6b #########
+
+>Dodano:
+    -Wstawianie przez administratowra nowych odczytów w imieniu lokatorów
+
+######### v1.7 #########
+
+>Dodano:
+    -Wysyłanie przez administratora indywidualnych plików konkretnemu użytkownikowi.
+    -Karta "czynsze" z poziomu lokatora została aktywowana.
+
+>Fix:
+    -Zablokowano możliwość przeglądania plików strony z poziomu eksploratora plików przeglądarki.
+
+######### v1.7a #########
+
+>Dodano:
+    -Sortowanie rosnąco lokatorów po ID lokatora w wygenerowanym raporcie.
+    -Wiersz "Główny licznik" w wygenerowanym raporcie za wybrany termin.
+
+>Fix:
+    -Zablokowano możliwość przeglądania plików strony z poziomu eksploratora plików przeglądarki.
+
+######### v1.7b #########
+
+>Fix:
+    -Poprawiono podpowiedź poprawnego wpisu stanu licznika.
+    -Poprawiono wyświetlanie stanu głównego licznika w raporcie do dwuch miejsc po przecinku.
+
+######### v1.7c #########
+
+>Dodano:
+    -W panelu użytkownika dodano pod polem wprowadzania danych adnotację o wprowadzaniu kropko do oddzielania części dziesiętnych
+>Zmieniono:
+    [Raport]
+        -Główny licznik wyświetlany jest jak lokatorzy.
+        -Stare pole głównego licznika pokazuje różnice głównego licznika od sumy różnicy lokatorów.
+        -Nazwa "Suma:" w raporcie została zmieniona na "Suma różnicy z lokatorów:".
+
+######### v1.7d #########
+
+>Zmieniono:
+    -Do nazwy plików PDF dopisywany jest ciąg złożony z pięciu znaków alfanumerycznych.
+
+######### v1.7e #########
+
+>Dodano:
+    -Usuwanie wysłanych czynszy
+
+>Zmieniono:
+    -Nowa nazwa zakładki "Zarządzaj czynszami" (poprzednio "Prześlij czynsz")
