@@ -107,3 +107,11 @@
 
 >Zmieniono:
     -Do nazwy plików PDF dopisywany jest ciąg złożony z pięciu znaków alfanumerycznych.
+
+######### v1.7e #########
+
+>Dodano:
+    -Usuwanie wysłanych czynszy
+
+>Zmieniono:
+    -Nowa nazwa zakładki "Zarządzaj czynszami" (poprzednio "Prześlij czynsz")

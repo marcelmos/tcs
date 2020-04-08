@@ -23,7 +23,7 @@ if($typKonta[0] != "1"){
         <a href="accountManager.php"><input type="button" value="Menedżer kont"></a>
         <a href="mainCounter.php"><input type="button" value="Główny licznik"></a>
         <a href="createUser.php"><input type="button" value="Kreator użytkownika"></a>
-        <a href="sendFile.php"><input type="button" value="Prześlij czynsz"></a>
+        <a href="sendFile.php"><input type="button" value="Zarządzaj czynszami"></a>
     </div>
 
     <div class="main-full">

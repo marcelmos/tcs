@@ -45,7 +45,7 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
             echo "<a href='accountManager.php'><input type='button' value='Menedżer kont'></a> ";
             echo "<a href='mainCounter.php'><input type='button' value='Główny licznik'></a> ";
             echo "<a href='generateReport.php'><input type='button' value='Kreator raportów'></a> ";
-            echo "<a href='sendFile.php'><input type='button' value='Prześlij czynsz'></a>";
+            echo "<a href='sendFile.php'><input type='button' value='Zarządzaj czynszami'></a>";
         }
         ?>
     </div>
