@@ -15,6 +15,16 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
 ?>
 <head>
     <meta charset="utf-8">
+
+    <!--- Favicon --->
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png">
+    <link rel="manifest" href="/favicons/site.webmanifest">
+    <link rel="mask-icon" href="/favicons/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#2b5797">
+    <meta name="theme-color" content="#ffffff">
+
     <title>Zarządzaj czynszami</title>
     <link rel="stylesheet" href="styl.css">
 </head>
@@ -38,9 +48,15 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
             <select name="lokator">
                 <option value="0">Brak</option>
                 <?php
-                $query = mysqli_query($db, "SELECT id, imie, nazwisko FROM lokatorzy WHERE typKonta_id = 2");
+                $query = mysqli_query($db, "SELECT id, nrLokalu, imie, nazwisko FROM lokatorzy WHERE typKonta_id = 2");
                 while($resoult = mysqli_fetch_array($query)){
-                    echo "<option value=".$resoult['id'].">".$resoult['imie']." ".$resoult['nazwisko']."</option>";
+                    if($resoult['nrLokalu'] < 10){
+                        $nrLokalu = "K0".$resoult['nrLokalu'];
+                    }else{
+                        $nrLokalu = "K".$resoult['nrLokalu'];
+                    }
+
+                    echo "<option value=".$resoult['id'].">[$nrLokalu] ".$resoult['imie']." ".$resoult['nazwisko']."</option>";
                 }
                 ?>
             </select><br>
@@ -54,15 +70,21 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
             <p>Wysyłane pliki nie powinny zawierać spacji.<br>Optymalna nazwa pliku: "rrrr-mm-dd-[inne dane].pdf"</p>
         </div>
         <div style="margin-top: 25px">
-            <h4>Usuń plik</h4>
+            <h4>Przeglądaj pliki</h4>
             <form method="post">
                 Wybierz lokatora:<br>
                 <select name="selectUser">
                     <option value="0">Brak</option>
                     <?php
-                    $query = mysqli_query($db, "SELECT id, imie, nazwisko FROM lokatorzy WHERE typKonta_id = 2");
+                    $query = mysqli_query($db, "SELECT id, nrLokalu, imie, nazwisko FROM lokatorzy WHERE typKonta_id = 2");
                     while($resoult = mysqli_fetch_array($query)){
-                        echo "<option value=".$resoult['id'].">".$resoult['imie']." ".$resoult['nazwisko']."</option>";
+                        if($resoult['nrLokalu'] < 10){
+                            $nrLokalu = "K0".$resoult['nrLokalu'];
+                        }else{
+                            $nrLokalu = "K".$resoult['nrLokalu'];
+                        }
+
+                        echo "<option value=".$resoult['id'].">[$nrLokalu] ".$resoult['imie']." ".$resoult['nazwisko']."</option>";
                     }
                     ?>
                </select><br>
