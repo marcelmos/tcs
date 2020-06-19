@@ -15,7 +15,7 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
 ?>
 <head>
     <meta charset="utf-8">
-        
+
     <!--- Favicon --->
     <link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32x32.png">
@@ -24,7 +24,7 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
     <link rel="mask-icon" href="/favicons/safari-pinned-tab.svg" color="#5bbad5">
     <meta name="msapplication-TileColor" content="#2b5797">
     <meta name="theme-color" content="#ffffff">
-    
+
     <title>Panel Główny</title>
     <link rel="stylesheet" href="styl.css">
 </head>
@@ -40,7 +40,7 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
         <a href="mainCounter.php"><input type="button" value="Główny licznik"></a>
         <a href="generateReport.php"><input type="button" value="Kreator raportów"></a>
         <a href="sendFile.php"><input type="button" value="Zarządzaj czynszami"></a>
-        <a href="changelog.txt" target="_blank"><input type="button" value="[v1.7e] Lista zmian"></a>
+        <a href="changelog.txt" target="_blank"><input type="button" value="[v1.8] Lista zmian"></a>
     </div>
 
     <div class="main-full">
@@ -55,9 +55,14 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
                         <select name="filterLokator">
                             <option value="0">Brak</option>
                             <?php
-                            $query = mysqli_query($db, "SELECT id, imie, nazwisko FROM lokatorzy WHERE typKonta_id = 2");
+                            $query = mysqli_query($db, "SELECT id, nrLokalu, imie, nazwisko FROM lokatorzy WHERE typKonta_id = 2  ORDER BY nrLokalu ASC");
                             while($resoult = mysqli_fetch_array($query)){
-                                echo "<option value=".$resoult['id'].">".$resoult['imie']." ".$resoult['nazwisko']."</option>";
+                                if($resoult['nrLokalu'] < 10){
+                                    $nrLokalu = "K0".$resoult['nrLokalu'];
+                                }else{
+                                    $nrLokalu = "K".$resoult['nrLokalu'];
+                                }
+                                echo "<option value=".$resoult['id'].">[$nrLokalu] ".$resoult['imie']." ".$resoult['nazwisko']."</option>";
                             }
                             ?>
                         </select>&nbsp;&nbsp;
@@ -91,9 +96,14 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
                         <select name="lokatorInsert">
                             <option value="0">Brak</option>
                             <?php
-                                $query = mysqli_query($db, "SELECT id, imie, nazwisko FROM lokatorzy WHERE typKonta_id = 2");
+                                $query = mysqli_query($db, "SELECT id, nrLokalu, imie, nazwisko FROM lokatorzy WHERE typKonta_id = 2  ORDER BY nrLokalu ASC");
                                 while($resoult = mysqli_fetch_array($query)){
-                                    echo "<option value=".$resoult['id'].">".$resoult['imie']." ".$resoult['nazwisko']."</option>";
+                                    if($resoult['nrLokalu'] < 10){
+                                        $nrLokalu = "K0".$resoult['nrLokalu'];
+                                    }else{
+                                        $nrLokalu = "K".$resoult['nrLokalu'];
+                                    }
+                                    echo "<option value=".$resoult['id'].">[$nrLokalu] ".$resoult['imie']." ".$resoult['nazwisko']."</option>";
                                 }
                             ?>
                         </select>

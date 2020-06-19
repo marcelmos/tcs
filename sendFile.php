@@ -42,13 +42,13 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
         <a href="generateReport.php"><input type="button" value="Kreator raportów"></a>
     </div>
 
-    <div class="main-full">
+    <div class="form-block main-full">
         <form enctype="multipart/form-data" method="post">
             Wybierz lokatora:<br>
             <select name="lokator">
                 <option value="0">Brak</option>
                 <?php
-                $query = mysqli_query($db, "SELECT id, nrLokalu, imie, nazwisko FROM lokatorzy WHERE typKonta_id = 2");
+                $query = mysqli_query($db, "SELECT id, nrLokalu, imie, nazwisko FROM lokatorzy WHERE typKonta_id = 2 ORDER BY nrLokalu ASC");
                 while($resoult = mysqli_fetch_array($query)){
                     if($resoult['nrLokalu'] < 10){
                         $nrLokalu = "K0".$resoult['nrLokalu'];
@@ -76,7 +76,7 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
                 <select name="selectUser">
                     <option value="0">Brak</option>
                     <?php
-                    $query = mysqli_query($db, "SELECT id, nrLokalu, imie, nazwisko FROM lokatorzy WHERE typKonta_id = 2");
+                    $query = mysqli_query($db, "SELECT id, nrLokalu, imie, nazwisko FROM lokatorzy WHERE typKonta_id = 2 ORDER BY nrLokalu ASC");
                     while($resoult = mysqli_fetch_array($query)){
                         if($resoult['nrLokalu'] < 10){
                             $nrLokalu = "K0".$resoult['nrLokalu'];
@@ -87,8 +87,8 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
                         echo "<option value=".$resoult['id'].">[$nrLokalu] ".$resoult['imie']." ".$resoult['nazwisko']."</option>";
                     }
                     ?>
-               </select><br>
-               <br>
+            </select><br>
+            <br>
                 <input type="submit" name="delFileOf" value="Wybierz lokatora">
             </form>
             <br>
@@ -114,6 +114,44 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
                 </ul>
             </form>
         </div>
+    </div>
+
+    <div class="data-sent main-full">
+            <h3>Lista przesłanych plików</h3>
+            <br>
+            <div class="file-list">
+            <?php
+
+                $query = mysqli_query($db, "SELECT id, nrLokalu, imie, nazwisko FROM lokatorzy WHERE typKonta_id = 2 ORDER BY nrLokalu ASC");
+                while($resoult = mysqli_fetch_array($query)){
+                    if($resoult['nrLokalu'] < 10){
+                        $nrLokalu = "K0".$resoult['nrLokalu'];
+                    }else{
+                        $nrLokalu = "K".$resoult['nrLokalu'];
+                    }
+
+                    echo "<p><u>[$nrLokalu] ".$resoult['imie']." ".$resoult['nazwisko']."</u></p>";
+                    echo "<ul>";
+
+                    //Show files
+                    $selected = $resoult['id'];
+
+                    $hashedFile = sha1($selected); //Hash ID
+                    if(file_exists("czynsze/".$hashedFile."/")){
+                        $clientFiles = glob("czynsze/".$hashedFile."/*.*");
+
+                        krsort($clientFiles);
+                        foreach($clientFiles as $file){
+                            echo "<li><a href=".$file."  target='_blank'>".basename($file)."</a></li>";
+                        }
+                    }else{
+                        echo "<li>Brak czynszów</li>";
+                    }
+
+                    echo "</ul><br>";
+                }
+            ?>
+            </div>
     </div>
 </body>
 <?php

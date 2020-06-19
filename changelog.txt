@@ -123,3 +123,15 @@
 
 >Zmieniono:
     -"Usuń plik" zmieniono na "Przeglądaj pliki" w zakładce Zarządzania czynszami
+
+######### v1.8 #########
+
+>Dodano:
+    -Lista przesłanych plików w zakładce "Zarządzaj czynszami".
+    -Numer lokalu w wszystkich listach rozwijanych.
+
+>Zmieniono:
+    -Kolorystyka pól rozwijalnych na ciemniejszy kolor.
+
+>Poprawiono:
+    -Kolejność wyświetlania lokatorów w listach rozwijanych według numeru lokalu.
