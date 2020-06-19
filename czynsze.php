@@ -10,6 +10,16 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
 ?>
 <head>
     <meta charset="utf-8">
+        
+    <!--- Favicon --->
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png">
+    <link rel="manifest" href="/favicons/site.webmanifest">
+    <link rel="mask-icon" href="/favicons/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#2b5797">
+    <meta name="theme-color" content="#ffffff">
+    
     <title>Panel Główny</title>
     <link rel="stylesheet" href="styl.css">
 </head>
@@ -46,7 +56,8 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
                 krsort($clientFiles);
                 foreach($clientFiles as $file)
                 {
-                echo "<li><a href=".$file."  target='_blank'>".basename($file)."</a></li>";
+                    $publicStr = substr(basename($file), 0, -10);    //Public string
+                    echo "<li><a href=".$file."  target='_blank'>$publicStr</a></li>";
                 }
             }else{
                 echo "<li>Brak czynszów</li>";

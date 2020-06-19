@@ -115,3 +115,23 @@
 
 >Zmieniono:
     -Nowa nazwa zakładki "Zarządzaj czynszami" (poprzednio "Prześlij czynsz")
+
+######### v1.7f #########
+
+>Dodano:
+    -Wyświetlanie numeru lokalu obok imienia i nazwiska przy wysyłaniu plików PDF
+
+>Zmieniono:
+    -"Usuń plik" zmieniono na "Przeglądaj pliki" w zakładce Zarządzania czynszami
+
+######### v1.8 #########
+
+>Dodano:
+    -Lista przesłanych plików w zakładce "Zarządzaj czynszami".
+    -Numer lokalu w wszystkich listach rozwijanych.
+
+>Zmieniono:
+    -Kolorystyka pól rozwijalnych na ciemniejszy kolor.
+
+>Poprawiono:
+    -Kolejność wyświetlania lokatorów w listach rozwijanych według numeru lokalu.

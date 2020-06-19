@@ -29,12 +29,16 @@ input[type=number] {
   -moz-appearance:textfield;
 }
 
+select>option{
+    border: none;
+}
+
 option:nth-child(2n){
-    background-color: #9fc8dd;
+    background-color: #515b61;
 }
 
 option:nth-child(2n+1) {
-	background-color: #8db3c6;
+	background-color: #465861;
 }
 
 .logout{
@@ -42,6 +46,8 @@ option:nth-child(2n+1) {
     border: none;
     color: #fff;
     height: 60%;
+    padding-right: 20px;
+    padding-left: 20px;
     font-size: 20px;
     float: right;
 }
@@ -203,4 +209,18 @@ tr:nth-child(2n+1) {
 
 .correct{
     color: #00e000;
+}
+
+.form-block{
+    width: 55%;
+    float: left;
+}
+
+.data-sent{
+    width: 44%;
+    float: right;
+}
+
+.file-list{
+    color: rgb(241, 241, 241);
 }

@@ -15,6 +15,16 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
 ?>
 <head>
     <meta charset="utf-8">
+
+    <!--- Favicon --->
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png">
+    <link rel="manifest" href="/favicons/site.webmanifest">
+    <link rel="mask-icon" href="/favicons/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#2b5797">
+    <meta name="theme-color" content="#ffffff">
+
     <title>Zarządzaj czynszami</title>
     <link rel="stylesheet" href="styl.css">
 </head>
@@ -32,15 +42,21 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
         <a href="generateReport.php"><input type="button" value="Kreator raportów"></a>
     </div>
 
-    <div class="main-full">
+    <div class="form-block main-full">
         <form enctype="multipart/form-data" method="post">
             Wybierz lokatora:<br>
             <select name="lokator">
                 <option value="0">Brak</option>
                 <?php
-                $query = mysqli_query($db, "SELECT id, imie, nazwisko FROM lokatorzy WHERE typKonta_id = 2");
+                $query = mysqli_query($db, "SELECT id, nrLokalu, imie, nazwisko FROM lokatorzy WHERE typKonta_id = 2 ORDER BY nrLokalu ASC");
                 while($resoult = mysqli_fetch_array($query)){
-                    echo "<option value=".$resoult['id'].">".$resoult['imie']." ".$resoult['nazwisko']."</option>";
+                    if($resoult['nrLokalu'] < 10){
+                        $nrLokalu = "K0".$resoult['nrLokalu'];
+                    }else{
+                        $nrLokalu = "K".$resoult['nrLokalu'];
+                    }
+
+                    echo "<option value=".$resoult['id'].">[$nrLokalu] ".$resoult['imie']." ".$resoult['nazwisko']."</option>";
                 }
                 ?>
             </select><br>
@@ -54,19 +70,25 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
             <p>Wysyłane pliki nie powinny zawierać spacji.<br>Optymalna nazwa pliku: "rrrr-mm-dd-[inne dane].pdf"</p>
         </div>
         <div style="margin-top: 25px">
-            <h4>Usuń plik</h4>
+            <h4>Przeglądaj pliki</h4>
             <form method="post">
                 Wybierz lokatora:<br>
                 <select name="selectUser">
                     <option value="0">Brak</option>
                     <?php
-                    $query = mysqli_query($db, "SELECT id, imie, nazwisko FROM lokatorzy WHERE typKonta_id = 2");
+                    $query = mysqli_query($db, "SELECT id, nrLokalu, imie, nazwisko FROM lokatorzy WHERE typKonta_id = 2 ORDER BY nrLokalu ASC");
                     while($resoult = mysqli_fetch_array($query)){
-                        echo "<option value=".$resoult['id'].">".$resoult['imie']." ".$resoult['nazwisko']."</option>";
+                        if($resoult['nrLokalu'] < 10){
+                            $nrLokalu = "K0".$resoult['nrLokalu'];
+                        }else{
+                            $nrLokalu = "K".$resoult['nrLokalu'];
+                        }
+
+                        echo "<option value=".$resoult['id'].">[$nrLokalu] ".$resoult['imie']." ".$resoult['nazwisko']."</option>";
                     }
                     ?>
-               </select><br>
-               <br>
+            </select><br>
+            <br>
                 <input type="submit" name="delFileOf" value="Wybierz lokatora">
             </form>
             <br>
@@ -92,6 +114,44 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
                 </ul>
             </form>
         </div>
+    </div>
+
+    <div class="data-sent main-full">
+            <h3>Lista przesłanych plików</h3>
+            <br>
+            <div class="file-list">
+            <?php
+
+                $query = mysqli_query($db, "SELECT id, nrLokalu, imie, nazwisko FROM lokatorzy WHERE typKonta_id = 2 ORDER BY nrLokalu ASC");
+                while($resoult = mysqli_fetch_array($query)){
+                    if($resoult['nrLokalu'] < 10){
+                        $nrLokalu = "K0".$resoult['nrLokalu'];
+                    }else{
+                        $nrLokalu = "K".$resoult['nrLokalu'];
+                    }
+
+                    echo "<p><u>[$nrLokalu] ".$resoult['imie']." ".$resoult['nazwisko']."</u></p>";
+                    echo "<ul>";
+
+                    //Show files
+                    $selected = $resoult['id'];
+
+                    $hashedFile = sha1($selected); //Hash ID
+                    if(file_exists("czynsze/".$hashedFile."/")){
+                        $clientFiles = glob("czynsze/".$hashedFile."/*.*");
+
+                        krsort($clientFiles);
+                        foreach($clientFiles as $file){
+                            echo "<li><a href=".$file."  target='_blank'>".basename($file)."</a></li>";
+                        }
+                    }else{
+                        echo "<li>Brak czynszów</li>";
+                    }
+
+                    echo "</ul><br>";
+                }
+            ?>
+            </div>
     </div>
 </body>
 <?php
