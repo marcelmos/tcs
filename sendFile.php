@@ -98,16 +98,20 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
                     if($_POST['delFileOf']){
                         $selected = $_POST['selectUser'];
 
-                        $hashedFile = sha1($selected); //Hash ID
-                        if(file_exists("czynsze/".$hashedFile."/")){
-                            $clientFiles = glob("czynsze/".$hashedFile."/*.*");
+                        if($selected > 0){
+                            $hashedFile = sha1($selected); //Hash ID
+                            if(file_exists("czynsze/".$hashedFile."/")){
+                                $clientFiles = glob("czynsze/".$hashedFile."/*.*");
 
-                            krsort($clientFiles);
-                            foreach($clientFiles as $file){
-                                echo "<li><a href=".$file."  target='_blank'>".basename($file)."</a> <button type='submit' name='deleteThis' value='$file'>Usuń plik</button></li>";
+                                krsort($clientFiles);
+                                foreach($clientFiles as $file){
+                                    echo "<li><a href=".$file."  target='_blank'>".basename($file)."</a> <button type='submit' name='deleteThis' value='$file'>Usuń plik</button></li>";
+                                }
+                            }else{
+                                echo "<li>Brak czynszów</li>";
                             }
                         }else{
-                            echo "<li>Brak czynszów</li>";
+                            echo "";
                         }
                     }
                 ?>
@@ -140,9 +144,13 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
                     if(file_exists("czynsze/".$hashedFile."/")){
                         $clientFiles = glob("czynsze/".$hashedFile."/*.*");
 
-                        krsort($clientFiles);
-                        foreach($clientFiles as $file){
-                            echo "<li><a href=".$file."  target='_blank'>".basename($file)."</a></li>";
+                        if($clientFiles){
+                            krsort($clientFiles);
+                            foreach($clientFiles as $file){
+                                echo "<li><a href=".$file."  target='_blank'>".basename($file)."</a></li>";
+                            }
+                        }else{
+                            echo "<li>Brak czynszów</li>";
                         }
                     }else{
                         echo "<li>Brak czynszów</li>";
