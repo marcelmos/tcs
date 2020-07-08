@@ -1,0 +1,102 @@
+*, *::before, *::after{
+    box-sizing: border-box;
+  }
+
+  body{
+     background: #838383;
+     font-family: Verdana, Geneva, Tahoma, sans-serif;
+  }
+
+  .pass-forget{
+    background: #c5c5c5;
+    text-align: center;
+    font-size: .75rem;
+    padding: 5px;
+  }
+
+  .login-block{
+      background: #afafaf;
+      width: 300px;
+      font-size: 24px;
+      margin: 30vh auto;
+      -webkit-box-shadow: 0px 0px 15px 2px rgba(0, 0, 0, 0.5);
+      -moz-box-shadow: 0px 0px 15px 2px rgba(0,0,0,0.5);
+      box-shadow: 0px 0px 15px 2px rgba(0,0,0,0.5);
+  }
+
+  .form{
+    margin: 10px auto;
+    width: 238px;
+  }
+
+  h2{
+    text-align: center;
+    background: #07607a;
+    color: #fff;
+    font-size: 2.5vh;
+    padding: 10px 0;
+  }
+
+  h4{
+    text-align: center;
+    /* background: #c5c5c536; */
+    color: #242424;
+    font-size: 2vh;
+    padding: 10px 0;
+}
+
+  input{
+    width: 200px;
+    height: 38px;
+    margin: 5px 0;
+    background: #e0e0e0;
+    border: none;
+    padding: 0 10px;
+    font-size: 1.25rem;
+  }
+
+  input.btn-login{
+    width: 238px;
+    height: 38px;
+    margin: 5px 0;
+    border: none;
+    background: #06a6d6;
+    color: #f7f7f7;
+    font-weight: 600;
+    font-size: 1.25rem;
+  }
+
+  input.btn-login:hover{
+    transition: background-color .5s;
+    background-color: #0785ab;
+  }
+
+  .login-before::before{
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    content: "\f007";
+    padding: 5px;
+    display: inline-block;
+    width: 38px;
+    height: 38px;
+    background: #07607a;
+    color: #fff;
+    text-align: center;
+    position: relative;
+    /* top: 4px; */
+  }
+
+  .password-before::before{
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    content: "\f084";
+    padding: 5px;
+    display: inline-block;
+    width: 38px;
+    height: 38px;
+    background: #07607a;
+    color: #fff;
+    text-align: center;
+    position: relative;
+    /* top: 2px; */
+  }

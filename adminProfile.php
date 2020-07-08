@@ -137,6 +137,7 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
                 <?php
                     $clientId = $_SESSION['clientToken'];       //Data as array
 
+                    //Data sorted by user
                     if($_POST['filterSubmit'] && (($_POST['filterLokator'] != "0")||($_POST['filterDate'] != "0"))){
 
                         $filterLokator = $_POST['filterLokator'];
@@ -171,7 +172,7 @@ $db = mysqli_connect($host, $db_user, $db_pass, $db);
                             $lastValue = $resoult['stanLicznika'];
                         }
                     }
-                    else{
+                    else{   //Data not sorted
                         $query = mysqli_query($db, "SELECT lokatorzy.id, lokatorzy.imie, lokatorzy.nazwisko, ROUND(stanLicznika, 2) AS stanLicznika, dataOdczytu, dane.id FROM dane JOIN lokatorzy ON  dane.idLokatora = lokatorzy.id ORDER BY concat(lokatorzy.id, lokatorzy.nazwisko) ASC, dataOdczytu ASC");
             //                $resoult = mysqli_fetch_array($query);
 
