@@ -1,6 +1,6 @@
 *Projekt ten jest wciąż rozwijany o nowe funkcje i usprawnienia.
 
-Do poprawnego działania wymagane jest importowanie bazy danych z folderu "sql".
+Do poprawnego działania wymagane jest zaimportowanie bazy danych z folderu "sql".
 
 Jest to drobny a zarazem jeden z większych projektów, aplikacja pozwalająca na administracje budynkiem.
 Celem jest ułatwienie komunikacji między lokatorami a zarządcą budynku.
